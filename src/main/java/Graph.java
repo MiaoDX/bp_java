@@ -15,7 +15,10 @@ public class Graph {
     private List<Point> pointsInReversedOrder = new ArrayList<Point>();
 
     private double input; // the output of the first node
+    private double output;
     private double target; // target output of the last node
+    private double error; //target - output
+    private double learnRatio = 0.05;
 
     /**
      *
@@ -36,18 +39,14 @@ public class Graph {
                 }
             }
         }
-
-
-        //init the values
-        initGraph();
     }
 
 
-    Graph(Multimap<Point, Point> pointPair, List<Point> pointsInOrder) {
+    Graph(Multimap<Point, Point> pointPair, List<Point> pointsInOrder, IRanGen ranGen) {
         weightedGraph.clear();
         for(Map.Entry<Point, Point> m : pointPair.entries()){
             //System.out.println(m.getKey() + "" + m.getValue());
-            weightedGraph.put(m.getKey(), m.getValue(),0.0);
+            weightedGraph.put(m.getKey(), m.getValue(),ranGen.nextDouble());
         }
 
         this.pointsInOrder = pointsInOrder;
@@ -56,23 +55,17 @@ public class Graph {
     }
 
 
-
-    public void initGraph(){
-
-        Random ranGen = new Random(0);//At first,make the random fixed
-
-        for(Table.Cell<Point, Point, Double> cell: weightedGraph.cellSet() ){
-            //weightedGraph.put(cell.getRowKey(), cell.getColumnKey(), ranGen.nextDouble());
-            weightedGraph.put(cell.getRowKey(), cell.getColumnKey(), 0.5);
-        }
-
-        //System.out.println(this);
-    }
-
-    public void updateGraph(float input, float target){
+    public void updateGraph(double input, double target){
         pointsInOrder.get(0).setOutput(input);
         this.input = input;
         this.target = target;
+    }
+
+
+    public void train(){
+        this.forward();
+        this.backwardTheta();
+        this.backwardWeight();
     }
 
 
@@ -80,12 +73,12 @@ public class Graph {
 
         //for(Point nowPoint : weightedGraph.columnKeySet()){
         for(Point nowPoint : pointsInOrder.subList(1,pointsInOrder.size())){
-            System.out.println(nowPoint);
+            //System.out.println(nowPoint);
             double nowPointInput = 0.0;
             for(Map.Entry<Point, Double> previous : weightedGraph.column(nowPoint).entrySet()){
                 //System.out.println(previous.getKey() + ":" + previous.getValue());
                 Point previousPoint = previous.getKey();
-                double weight = previous.getValue();
+                double weight = weightedGraph.get(previousPoint, nowPoint);
                 nowPointInput += previousPoint.getOutput()*weight;
             }
 
@@ -93,24 +86,27 @@ public class Graph {
             nowPoint.setInput(nowPointInput);
             nowPoint.setOutput(nowPointOutput);
         }
+
+        output = pointsInReversedOrder.get(0).getOutput();
+        error = target - output;
     }
 
 
     /**
      * back the error(theta)
      */
-    public void backwardTheta(double output){
+    public void backwardTheta(){
 
         double theta = target - output;
         pointsInReversedOrder.get(0).setTheta(theta);
 
         for(Point nowPoint : pointsInReversedOrder.subList(1, pointsInReversedOrder.size())){
-            System.out.println(nowPoint + ":" + nowPoint.getTheta());
+            //System.out.println(nowPoint + ":" + nowPoint.getTheta());
             double nowPointTheta = 0;
 
             for(Map.Entry<Point, Double> after: weightedGraph.row(nowPoint).entrySet()){
                 Point afterPoint = after.getKey();
-                double weight = after.getValue();
+                double weight = weightedGraph.get(nowPoint, afterPoint);
                 nowPointTheta += afterPoint.getTheta()*weight;
             }
 
@@ -122,26 +118,40 @@ public class Graph {
      * As the http://galaxy.agh.edu.pl/%7Evlsi/AI/backp_t_en/backprop.html,back or forward is the same
      */
     public void backwardWeight(){
+        for(Point nowPoint : pointsInReversedOrder.subList(1, pointsInReversedOrder.size())){
+            //System.out.println(nowPoint + ":" + nowPoint.getTheta());
 
-        
-
-
+            for(Map.Entry<Point, Double> after: weightedGraph.row(nowPoint).entrySet()){
+                Point afterPoint = after.getKey();
+                updateWeight(nowPoint, afterPoint);
+            }
+        }
     }
 
 
 
+    public void updateWeight(Point nowPoint, Point afterPoint){
+        double nowWeight = weightedGraph.get(nowPoint, afterPoint);
+
+        double newWeight = nowWeight + learnRatio*afterPoint.getTheta()*
+                differentiationF(afterPoint.getOutput())*nowPoint.getOutput() ;
+
+        weightedGraph.put(nowPoint, afterPoint, newWeight);
+    }
+
+    public double differentiationF(double input){
+        double sig = Function.sigmoid(input);
+        return sig*(1-sig);
+    }
 
 
 
 
     public double activationF(double input){
-        return sigmoid(input);
+        return Function.sigmoid(input);
     }
 
-    public double sigmoid(double input){
-        //return 1.0/(1+Math.exp(-input));
-        return input*2;
-    }
+
 
 
     public Table<Point, Point, Double> getWeightedGraph() {
@@ -149,9 +159,14 @@ public class Graph {
     }
 
 
-    public void setPointsInOrder(List<Point> pointsInOrder) {
-        this.pointsInOrder = pointsInOrder;
+    public double getOutput() {
+        return output;
     }
+
+    public double getError() {
+        return error;
+    }
+
 
     @Override
     public String toString(){

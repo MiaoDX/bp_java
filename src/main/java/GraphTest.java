@@ -31,6 +31,7 @@ public class GraphTest {
     }
 
 */
+
     @Test
     public void predefinedGraph(){
         Point p00 = new Point(0,0);
@@ -43,7 +44,7 @@ public class GraphTest {
         p00.setOutput(5);
 
 
-        Multimap<Point, Point> listMultiMap = HashMultimap.create();
+        Multimap<Point, Point> listMultiMap = LinkedHashMultimap.create();
         listMultiMap.put(p00, p10);
         listMultiMap.put(p00, p11);
         listMultiMap.put(p00, p12);
@@ -60,22 +61,48 @@ public class GraphTest {
         pointsOrder.add(p12);
         pointsOrder.add(p20);
 
-        Graph graph = new Graph(listMultiMap,pointsOrder);
+        //Graph graph = new Graph(listMultiMap,pointsOrder,new RanGenFaux());
 
-        graph.initGraph();
+        IRanGen ranGen = new RanGen(0);
+        Graph graph = new Graph(listMultiMap,pointsOrder,ranGen);
+        FunctionFaux functionFaux = new FunctionFaux(ranGen, 2);
 
-        graph.updateGraph(5,20);
+        int time = 0;
 
-        graph.forward();
+        do{
+            time ++;
+            List<Double> doubles = functionFaux.getNextInputAndTarget();
+//            double input = 5;
+//            double target = 0.9;
 
-        System.out.println(graph);
+            double input = doubles.get(0);
+            double target = doubles.get(1);
+            //System.out.println(doubles);
 
-        System.out.println(p20);
+            graph.updateGraph(input, target);
+
+            //System.out.println("Enter,error:" + graph.getError());
+
+            graph.train();
 
 
-        graph.backwardTheta(p20.getOutput());
+            if (time%1000 == 0){
+                System.out.println("time:" + time + ",error:" + graph.getError());
+            }
 
-        System.out.println(graph);
+
+            //System.out.println("Out,error:" + graph.getError());
+        }while (time < 1000000 || Math.abs(graph.getError()) > 0.001);
+
+        System.out.println(graph.getError());
+
+//        List<Double> doubles = functionFaux.getNextInputAndTarget();
+//        double input = doubles.get(0);
+//        double target = doubles.get(1);
+//        graph.updateGraph(input,target);
+//        graph.train();
+//
+//        System.out.println(graph.getError());
 
     }
 
