@@ -57,6 +57,7 @@ public class Graph {
 
 
     public void updateGraph(double input, double target){
+        pointsInOrder.get(0).setInput(input);
         pointsInOrder.get(0).setOutput(input);
         this.input = input;
         this.target = target;
@@ -109,8 +110,10 @@ public class Graph {
             for(Map.Entry<Point, Double> after: weightedGraph.row(nowPoint).entrySet()){
                 Point afterPoint = after.getKey();
                 double weight = weightedGraph.get(nowPoint, afterPoint);
-                nowPointTheta += afterPoint.getTheta()*differentiationF(afterPoint.getInput())*weight;
+                nowPointTheta += afterPoint.getTheta()*weight;
             }
+
+            nowPointTheta = nowPointTheta*differentiationF(nowPoint.getInput());
 
             nowPoint.setTheta(nowPointTheta);
         }

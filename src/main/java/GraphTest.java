@@ -50,6 +50,7 @@ public class GraphTest {
         FunctionFaux functionFaux = new FunctionFaux(ranGen, 5);
 
         int time = 0;
+        double maxError = 0.0;
 
         do{
             time ++;
@@ -59,6 +60,7 @@ public class GraphTest {
 
             double input = doubles.get(0);
             double target = doubles.get(1);
+            //target = Function.sigmoid(target);
             //System.out.println(doubles);
 
             graph.updateGraph(input, target);
@@ -68,8 +70,13 @@ public class GraphTest {
             graph.train();
 
 
+            if(graph.getError() > maxError){
+                maxError = graph.getError();
+            }
+
             if (time%100000 == 0){
-                System.out.println("time:" + time + ",error:" + graph.getError());
+                System.out.println("time:" + time + "maxError:" + maxError + ",error:" + graph.getError());
+                maxError = 0;
             }
 
 
