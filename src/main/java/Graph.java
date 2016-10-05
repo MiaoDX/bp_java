@@ -99,7 +99,8 @@ public class Graph {
     public void backwardTheta(){
 
         double theta = target - output;
-        pointsInReversedOrder.get(0).setTheta(theta);
+        Point lastPoint = pointsInReversedOrder.get(0);
+        lastPoint.setTheta(differentiationF(lastPoint.getInput())*theta);
 
         for(Point nowPoint : pointsInReversedOrder.subList(1, pointsInReversedOrder.size())){
             //System.out.println(nowPoint + ":" + nowPoint.getTheta());
@@ -108,7 +109,7 @@ public class Graph {
             for(Map.Entry<Point, Double> after: weightedGraph.row(nowPoint).entrySet()){
                 Point afterPoint = after.getKey();
                 double weight = weightedGraph.get(nowPoint, afterPoint);
-                nowPointTheta += afterPoint.getTheta()*weight;
+                nowPointTheta += afterPoint.getTheta()*differentiationF(afterPoint.getInput())*weight;
             }
 
             nowPoint.setTheta(nowPointTheta);
@@ -135,7 +136,7 @@ public class Graph {
         double nowWeight = weightedGraph.get(nowPoint, afterPoint);
 
         double newWeight = nowWeight + learnRatio*afterPoint.getTheta()*
-                differentiationF(afterPoint.getInput())*nowPoint.getOutput() ;
+                nowPoint.getOutput() ;
 
         weightedGraph.put(nowPoint, afterPoint, newWeight);
     }

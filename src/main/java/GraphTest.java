@@ -47,7 +47,7 @@ public class GraphTest {
 
         IRanGen ranGen = new RanGen(0);
         Graph graph = new Graph(linkedHashMultimap,pointsOrder,ranGen);
-        FunctionFaux functionFaux = new FunctionFaux(ranGen, 2);
+        FunctionFaux functionFaux = new FunctionFaux(ranGen, 5);
 
         int time = 0;
 
@@ -68,15 +68,15 @@ public class GraphTest {
             graph.train();
 
 
-            if (time%1000 == 0){
+            if (time%100000 == 0){
                 System.out.println("time:" + time + ",error:" + graph.getError());
             }
 
 
             //System.out.println("Out,error:" + graph.getError());
-        }while (time < 1000000 || Math.abs(graph.getError()) > 0.001);
+        }while (time < 100000000 || Math.abs(graph.getError()) > 0.001);
 
-        System.out.println(graph.getError());
+        System.out.println("\n" + "time:" + time + ",error:" + graph.getError());
 
 //        List<Double> doubles = functionFaux.getNextInputAndTarget();
 //        double input = doubles.get(0);
