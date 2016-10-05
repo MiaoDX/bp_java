@@ -1,4 +1,5 @@
 import com.google.common.collect.HashBasedTable;
+import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Table;
 
@@ -42,7 +43,7 @@ public class Graph {
     }
 
 
-    Graph(Multimap<Point, Point> pointPair, List<Point> pointsInOrder, IRanGen ranGen) {
+    Graph(LinkedHashMultimap<Point, Point> pointPair, List<Point> pointsInOrder, IRanGen ranGen) {
         weightedGraph.clear();
         for(Map.Entry<Point, Point> m : pointPair.entries()){
             //System.out.println(m.getKey() + "" + m.getValue());
@@ -134,7 +135,7 @@ public class Graph {
         double nowWeight = weightedGraph.get(nowPoint, afterPoint);
 
         double newWeight = nowWeight + learnRatio*afterPoint.getTheta()*
-                differentiationF(afterPoint.getOutput())*nowPoint.getOutput() ;
+                differentiationF(afterPoint.getInput())*nowPoint.getOutput() ;
 
         weightedGraph.put(nowPoint, afterPoint, newWeight);
     }

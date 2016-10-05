@@ -13,24 +13,6 @@ import java.util.List;
  */
 public class GraphTest {
 
-    /*
-    @Test
-    public void testGenerator(){
-        List<Integer> integerList = new ArrayList<>();
-        integerList.add(1);
-        integerList.add(4);
-        integerList.add(1);
-        Graph graph = new Graph(integerList);
-
-        System.out.println(graph);
-
-        graph.forward();
-
-        System.out.println(graph);
-
-    }
-
-*/
 
     @Test
     public void predefinedGraph(){
@@ -44,14 +26,14 @@ public class GraphTest {
         p00.setOutput(5);
 
 
-        Multimap<Point, Point> listMultiMap = LinkedHashMultimap.create();
-        listMultiMap.put(p00, p10);
-        listMultiMap.put(p00, p11);
-        listMultiMap.put(p00, p12);
+        LinkedHashMultimap<Point, Point> linkedHashMultimap = LinkedHashMultimap.create();
+        linkedHashMultimap.put(p00, p10);
+        linkedHashMultimap.put(p00, p11);
+        linkedHashMultimap.put(p00, p12);
 
-        listMultiMap.put(p10, p20);
-        listMultiMap.put(p11, p20);
-        listMultiMap.put(p12, p20);
+        linkedHashMultimap.put(p10, p20);
+        linkedHashMultimap.put(p11, p20);
+        linkedHashMultimap.put(p12, p20);
 
 
         List<Point> pointsOrder = new ArrayList<Point>();
@@ -61,10 +43,10 @@ public class GraphTest {
         pointsOrder.add(p12);
         pointsOrder.add(p20);
 
-        //Graph graph = new Graph(listMultiMap,pointsOrder,new RanGenFaux());
+        //Graph graph = new Graph(linkedHashMultimap,pointsOrder,new RanGenFaux());
 
         IRanGen ranGen = new RanGen(0);
-        Graph graph = new Graph(listMultiMap,pointsOrder,ranGen);
+        Graph graph = new Graph(linkedHashMultimap,pointsOrder,ranGen);
         FunctionFaux functionFaux = new FunctionFaux(ranGen, 2);
 
         int time = 0;
@@ -106,35 +88,6 @@ public class GraphTest {
 
     }
 
-/*
-    @Test
-    public void  arrayListCopy(){
-        System.out.println("Enter arrayListCopy");
-
-        List<Point> list = new ArrayList<Point>();
-
-        Point p1 = new Point(1,1);
-        Point p2 = new Point(1,2);
-        Point p3 = new Point(1,3);
-
-        list.add(p1);
-        list.add(p2);
-        list.add(p3);
-
-        List<Point> list1 = new ArrayList<Point>();
-        list1.addAll(list);
-
-        Collections.reverse(list1);
-
-
-        p1.setOutput(100);
-
-        System.out.println(list);
-        System.out.println(list1);
-
-        System.out.println("Leave arrayListCopy");
-
-    }*/
 
 
 }
