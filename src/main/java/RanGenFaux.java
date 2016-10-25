@@ -8,21 +8,20 @@ public class RanGenFaux implements IRanGen {
 
     List<Double> list = new ArrayList<Double>();
     int nowIndex = -1;
-    int maxnum = 100;
+    int maxNum = 100;
 
     RanGenFaux(){
-
-        for(int i = 0; i < maxnum; i ++){
-            list.add(((double)i)/maxnum);
+        for(int i = 0; i < maxNum; i ++){
+            list.add(((double)i)/maxNum);
         }
+    }
 
+    public int getMaxNum() {
+        return maxNum;
+    }
 
-//        list.add(0.1);
-//        list.add(0.2);
-//        list.add(0.3);
-//        list.add(0.4);
-//        list.add(0.5);
-//        list.add(0.6);
+    public boolean hasNext() {
+        return nowIndex < maxNum - 1;
     }
 
     public double nextDouble() {

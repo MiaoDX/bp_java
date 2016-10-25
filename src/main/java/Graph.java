@@ -1,6 +1,5 @@
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.LinkedHashMultimap;
-import com.google.common.collect.Multimap;
 import com.google.common.collect.Table;
 
 import java.util.*;
@@ -43,6 +42,12 @@ public class Graph {
     }
 
 
+    /**
+     *
+     * @param pointPair the connections of points(p00-p10,p00-011,...)
+     * @param pointsInOrder
+     * @param ranGen
+     */
     Graph(LinkedHashMultimap<Point, Point> pointPair, List<Point> pointsInOrder, IRanGen ranGen) {
         weightedGraph.clear();
         for(Map.Entry<Point, Point> m : pointPair.entries()){
@@ -56,9 +61,17 @@ public class Graph {
     }
 
 
+    /**
+     * Since when forward and backward we don't deal with the firstPoint,so when update the graph,we set the value properly.
+     * @param input
+     * @param target
+     */
     public void updateGraph(double input, double target){
-        pointsInOrder.get(0).setInput(input);
-        pointsInOrder.get(0).setOutput(input);
+        Point firstPoint = pointsInOrder.get(0);
+//        pointsInOrder.get(0).setInput(input);
+//        pointsInOrder.get(0).setOutput(input);
+        firstPoint.setInput(input);
+        firstPoint.setOutput(firstPoint.getActivationF().apply(input));
         this.input = input;
         this.target = target;
     }
@@ -69,6 +82,18 @@ public class Graph {
         this.backwardTheta();
         this.backwardWeight();
     }
+
+
+    public void beautifyWeightedGraphOutput(){
+        for(Point nowPoint: pointsInOrder){
+            System.out.println("NowPoint: "+nowPoint);
+
+            for(Map.Entry<Point,Double> after:weightedGraph.row(nowPoint).entrySet()){
+                System.out.println("\t" + "afterPoint: " + after.getKey() +";weight: " + after.getValue());
+            }
+        }
+    }
+
 
 
     public void forward(){
@@ -84,7 +109,8 @@ public class Graph {
                 nowPointInput += previousPoint.getOutput()*weight;
             }
 
-            double nowPointOutput = activationF(nowPointInput);
+//            double nowPointOutput = activationF(nowPointInput);
+            double nowPointOutput = nowPoint.getActivationF().apply(nowPointInput);
             nowPoint.setInput(nowPointInput);
             nowPoint.setOutput(nowPointOutput);
         }
@@ -99,9 +125,10 @@ public class Graph {
      */
     public void backwardTheta(){
 
-        double theta = target - output;
+        double theta = error;
         Point lastPoint = pointsInReversedOrder.get(0);
-        lastPoint.setTheta(differentiationF(lastPoint.getInput())*theta);
+//        lastPoint.setTheta(differentiationF(lastPoint.getInput())*theta);
+        lastPoint.setTheta(lastPoint.getDifferentiationF().apply(lastPoint.getInput())*theta);
 
         for(Point nowPoint : pointsInReversedOrder.subList(1, pointsInReversedOrder.size())){
             //System.out.println(nowPoint + ":" + nowPoint.getTheta());
@@ -113,14 +140,15 @@ public class Graph {
                 nowPointTheta += afterPoint.getTheta()*weight;
             }
 
-            nowPointTheta = nowPointTheta*differentiationF(nowPoint.getInput());
+//            nowPointTheta = nowPointTheta*differentiationF(nowPoint.getInput());
+            nowPointTheta = nowPoint.getDifferentiationF().apply(nowPoint.getInput())*nowPointTheta;
 
             nowPoint.setTheta(nowPointTheta);
         }
     }
 
     /**
-     * As the http://galaxy.agh.edu.pl/%7Evlsi/AI/backp_t_en/backprop.html,back or forward is the same
+     * As the http://galaxy.agh.edu.pl/%7Evlsi/AI/backp_t_en/backprop.html ,back or forward is the same
      */
     public void backwardWeight(){
         for(Point nowPoint : pointsInReversedOrder.subList(1, pointsInReversedOrder.size())){
@@ -145,7 +173,7 @@ public class Graph {
     }
 
     public double differentiationF(double input){
-        double sig = Function.sigmoid(input);
+        double sig = ActivationFuntions.sigmoid(input);
         return sig*(1-sig);
     }
 
@@ -153,7 +181,7 @@ public class Graph {
 
 
     public double activationF(double input){
-        return Function.sigmoid(input);
+        return ActivationFuntions.sigmoid(input);
     }
 
 

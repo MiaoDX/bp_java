@@ -11,6 +11,14 @@ public class RanGen implements IRanGen {
         random.setSeed(seed);
     }
 
+    public int getMaxNum() {
+        return Integer.MAX_VALUE;
+    }
+
+    public boolean hasNext() {
+        return true;
+    }
+
     public double nextDouble() {
         return random.nextDouble();
     }

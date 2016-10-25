@@ -1,5 +1,7 @@
 import com.alibaba.fastjson.JSON;
 
+import java.util.function.Function;
+
 /**
  * Created by miao on 2016/10/4.
  */
@@ -9,6 +11,9 @@ public class Point {
     private double theta;
     private double input;
     private double output;
+
+    private Function<Double, Double> activationF = ActivationFuntions.sigmoidLambda;
+    private Function<Double, Double> differentiationF = ActivationFuntions.sigmoidDifferentiationLambda;
 
     Point(int layer, int number){
         this.layer = layer;
@@ -65,5 +70,19 @@ public class Point {
         this.output = output;
     }
 
+    public Function<Double, Double> getDifferentiationF() {
+        return differentiationF;
+    }
 
+    public void setDifferentiationF(Function<Double, Double> differentiationF) {
+        this.differentiationF = differentiationF;
+    }
+
+    public Function<Double, Double> getActivationF() {
+        return activationF;
+    }
+
+    public void setActivationF(Function<Double, Double> activationF) {
+        this.activationF = activationF;
+    }
 }
