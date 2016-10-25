@@ -7,6 +7,8 @@ public class RanGen implements IRanGen {
 
     private Random random = new Random();
 
+    RanGen(){}  //no seed,use the default value(Current time)
+
     RanGen(int seed){
         random.setSeed(seed);
     }

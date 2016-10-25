@@ -4,6 +4,8 @@ import java.util.function.Function;
  * Created by miao on 2016/10/4.
  */
 public class ActivationFuntions {
+
+    /*   Some activation functions and their differentiation function   */
     public static double sigmoid(double input){
         return 1.0/(1+Math.exp(-input));
     }
@@ -20,7 +22,14 @@ public class ActivationFuntions {
 
     public static Function<Double,Double> sameDifferentiationLambda = input -> 1.0;
 
+
+
+
+
+
     public static Function<Integer,Integer> fortest = input -> input*2;
+
+
 
 
 
