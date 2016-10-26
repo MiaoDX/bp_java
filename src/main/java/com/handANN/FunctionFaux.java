@@ -1,3 +1,5 @@
+package com.handANN;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
@@ -26,12 +28,8 @@ public class FunctionFaux {
     private List<Double> functionValues = null;
 
 
-    FunctionFaux(IRanGen ranGen, Function<Double, Double> matchingF,Double domainStart,Double domainEnd,int num){
-        this.ranGen = ranGen;
-        this.matchingF = matchingF;
-        this.domainStart = domainStart;
-        this.domainEnd = domainEnd;
-        this.num = num;
+    public FunctionFaux(IRanGen ranGen, Function<Double, Double> matchingF, Double domainStart, Double domainEnd, int num){
+
 
         double step = (domainEnd-domainStart)/(num-1);  //a little attention,to split [0,1] to 5 parts,step should be 1.0/4 ^_^
         for(int i = 0;i < num;i ++){
@@ -39,6 +37,13 @@ public class FunctionFaux {
         }
 
         functionValues = domainValues.stream().map(v -> matchingF.apply(v)).collect(Collectors.toList());
+
+
+        this.ranGen = ranGen;
+        this.matchingF = matchingF;
+        this.domainStart = domainStart;
+        this.domainEnd = domainEnd;
+        this.num = num;
     }
 
 

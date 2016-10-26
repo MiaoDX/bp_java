@@ -1,3 +1,5 @@
+package com.handANN;
+
 import com.alibaba.fastjson.JSON;
 
 import java.util.function.Function;
@@ -11,11 +13,12 @@ public class Point {
     private double theta;
     private double input;
     private double output;
+    private double bias;
 
     private Function<Double, Double> activationF = ActivationFuntions.sigmoidLambda;
     private Function<Double, Double> differentiationF = ActivationFuntions.sigmoidDifferentiationLambda;
 
-    Point(int layer, int number){
+    public Point(int layer, int number){
         this.layer = layer;
         this.number = number;
     }
@@ -84,5 +87,13 @@ public class Point {
 
     public void setActivationF(Function<Double, Double> activationF) {
         this.activationF = activationF;
+    }
+
+    public double getBias() {
+        return bias;
+    }
+
+    public void setBias(double bias) {
+        this.bias = bias;
     }
 }

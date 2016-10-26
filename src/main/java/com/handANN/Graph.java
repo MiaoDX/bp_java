@@ -1,3 +1,5 @@
+package com.handANN;
+
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Table;
@@ -25,7 +27,7 @@ public class Graph {
      * @param layerNum, each element present the number of point of given layer
      *                  [1,4,1] means first layer has 1 point,second layer has 4 points,...
      */
-    Graph(List<Integer> layerNum){
+    public Graph(List<Integer> layerNum){
         weightedGraph.clear();
 
         for(int leftLayer = 0; leftLayer < layerNum.size() - 1; leftLayer ++){
@@ -48,16 +50,28 @@ public class Graph {
      * @param pointsInOrder
      * @param ranGen
      */
-    Graph(LinkedHashMultimap<Point, Point> pointPair, List<Point> pointsInOrder, IRanGen ranGen) {
+    public Graph(LinkedHashMultimap<Point, Point> pointPair, List<Point> pointsInOrder, IRanGen ranGen) {
         weightedGraph.clear();
         for(Map.Entry<Point, Point> m : pointPair.entries()){
             //System.out.println(m.getKey() + "" + m.getValue());
             weightedGraph.put(m.getKey(), m.getValue(),ranGen.nextDouble());
         }
 
+        for(Point m : pointsInOrder){
+            m.setBias(ranGen.nextDouble());
+        }
+
         this.pointsInOrder = pointsInOrder;
         this.pointsInReversedOrder.addAll(pointsInOrder);
         Collections.reverse(this.pointsInReversedOrder);
+    }
+
+    /**
+     * OpenClose principle,to provide learnRatio para.
+     */
+    public Graph(LinkedHashMultimap<Point, Point> pointPair, List<Point> pointsInOrder, IRanGen ranGen, double learnRatio) {
+        this(pointPair, pointsInOrder, ranGen); //no learnRation version
+        this.learnRatio = learnRatio;
     }
 
 
@@ -109,6 +123,7 @@ public class Graph {
                 nowPointInput += previousPoint.getOutput()*weight;
             }
 
+            nowPointInput += nowPoint.getBias();
 //            double nowPointOutput = activationF(nowPointInput);
             double nowPointOutput = nowPoint.getActivationF().apply(nowPointInput);
             nowPoint.setInput(nowPointInput);
@@ -159,6 +174,8 @@ public class Graph {
                 updateWeight(nowPoint, afterPoint);
             }
         }
+
+        updateBias();
     }
 
 
@@ -171,6 +188,14 @@ public class Graph {
 
         weightedGraph.put(nowPoint, afterPoint, newWeight);
     }
+
+    public void updateBias(){
+        for(Point p : pointsInOrder){
+            double newBias = p.getBias() + learnRatio*p.getTheta();
+            p.setBias(newBias);
+        }
+    }
+
 
     public double differentiationF(double input){
         double sig = ActivationFuntions.sigmoid(input);

@@ -1,15 +1,19 @@
+package com.handANNTest;
 /**
  * Created by miao on 2016/10/5.
  */
 
 
-import com.alibaba.fastjson.JSON;
 import com.google.common.collect.LinkedHashMultimap;
+import com.handANN.Graph;
+import com.handANN.IRanGen;
+import com.handANN.Point;
+import com.handANN.RanGen;
 import org.testng.annotations.Test;
 
 import java.util.ArrayList;
 import java.util.List;
-import static org.assertj.core.api.Assertions.*;
+
 /**
  * Test our graph with some other tests
  * https://theclevermachine.wordpress.com/tag/backpropagation/

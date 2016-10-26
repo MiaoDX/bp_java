@@ -1,14 +1,16 @@
+package com.handANNTest;
+
+import com.handANN.ActivationFuntions;
 import org.testng.annotations.Test;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.*;
+
+
 
 /**
  * Created by miao on 2016/10/25.

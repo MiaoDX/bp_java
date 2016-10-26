@@ -1,3 +1,9 @@
+package com.handANNTest;
+
+import com.handANN.FunctionFaux;
+import com.handANN.IRanGen;
+import com.handANN.MatchingFunctions;
+import com.handANN.RanGen;
 import org.testng.annotations.Test;
 
 import java.util.List;

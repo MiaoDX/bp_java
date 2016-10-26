@@ -1,6 +1,9 @@
+package com.handANNTest;
+
+import com.handANN.IRanGen;
+import com.handANN.RanGenProvided;
 import org.testng.annotations.Test;
 
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 

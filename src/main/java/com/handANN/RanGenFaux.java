@@ -1,25 +1,21 @@
+package com.handANN;
+
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by miao on 2016/10/24.
+ * Created by miao on 2016/10/4.
  */
-public class RanGenProvided implements IRanGen {
-
+public class RanGenFaux implements IRanGen {
 
     List<Double> list = new ArrayList<Double>();
     int nowIndex = -1;
-    int maxNum = 0;
+    int maxNum = 100;
 
-
-    RanGenProvided(Double... args){
-        int num = 0;
-        for (Double arg : args) {
-//            System.out.println(arg);
-            list.add(arg);
-            num += 1;
+    public RanGenFaux(){
+        for(int i = 0; i < maxNum; i ++){
+            list.add(((double)i)/maxNum);
         }
-        maxNum = num;
     }
 
     public int getMaxNum() {

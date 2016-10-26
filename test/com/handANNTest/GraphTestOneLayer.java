@@ -1,6 +1,7 @@
+package com.handANNTest;
+
 import com.google.common.collect.LinkedHashMultimap;
-import org.assertj.core.data.Offset;
-import org.testng.annotations.BeforeTest;
+import com.handANN.*;
 import org.testng.annotations.Test;
 
 import java.util.ArrayList;
@@ -44,7 +45,7 @@ public class GraphTestOneLayer {
         pointsOrder.add(p00);
         pointsOrder.add(p10);
 
-        IRanGen ranGen = new RanGenProvided(0.5);
+        IRanGen ranGen = new RanGenProvided(0.5, 0.5, 0.5);//one for p00->p01, two for bias
         Graph graph = new Graph(linkedHashMultimap,pointsOrder,ranGen);
 
 
@@ -53,8 +54,10 @@ public class GraphTestOneLayer {
         graph.updateGraph(1.0,1.0);
         assertThat(p00.getInput()).isEqualTo(1.0);
         assertThat(p00.getOutput()).isEqualTo(0.5);
+        assertThat(p00.getBias()).isEqualTo(0.5);
         assertThat(p10.getInput()).isEqualTo(0.0);
         assertThat(p10.getOutput()).isEqualTo(0.0);
+        assertThat(p10.getBias()).isEqualTo(0.5);
         assertThat(graph.getWeightedGraph().get(p00,p10)).isEqualTo(0.5);
 
 
@@ -62,37 +65,28 @@ public class GraphTestOneLayer {
 
         //forward
         graph.forward();
-        assertThat(graph.getError()).isEqualTo(3.0/4);
+        assertThat(graph.getError()).isEqualTo(1.0/4);
 
 
         graph.backwardTheta();
-        assertThat(p10.getTheta()).isEqualTo(3.0/4);    //sameDifferentiation is 1
-        assertThat(p00.getTheta()).isEqualTo(3.0/16);
+        assertThat(p10.getTheta()).isEqualTo(1.0/4);    //sameDifferentiation is 1
+        assertThat(p00.getTheta()).isEqualTo(1.0/16);
 
 
         graph.backwardWeight();
-        assertThat(graph.getWeightedGraph().get(p00,p10)).isEqualTo(83.0/160);
+        assertThat(graph.getWeightedGraph().get(p00,p10)).isEqualTo(81.0/160);
+        assertThat(p10.getBias()).isEqualTo(0.5 + 0.05*(1.0/4));
 
 
+        //assert getting better
+        GraphTest.gettingBetter(graph);
 
-
-
-        int time = 1;
-
-        do{
-            time ++;
-            graph.train();
-
-            if(time % 1000 == 0){
-                System.out.println(time + ":" + graph.getOutput() +";" + graph.getError());
-            }
-
-        }while (graph.getError() > 0.001);
-
-        graph.beautifyWeightedGraphOutput();
-        System.out.println("\n" + time + ":" + graph.getOutput() +";" + graph.getError());
 
     }
+
+
+
+
 
     @Test
     public void oneLayerWithSigmoidAndSameActivationFunction(){
@@ -109,7 +103,7 @@ public class GraphTestOneLayer {
         pointsOrder.add(p00);
         pointsOrder.add(p10);
 
-        IRanGen ranGen = new RanGenProvided(0.5);
+        IRanGen ranGen = new RanGenProvided(0.5, 0.5, 0.5);//one for p00->p01, two for bias
         Graph graph = new Graph(linkedHashMultimap,pointsOrder,ranGen);
 
 
@@ -123,8 +117,10 @@ public class GraphTestOneLayer {
         Double p00_output = sigmoid.apply(1.0);
 
         assertThat(p00.getOutput()).isEqualTo(p00_output);
+        assertThat(p00.getBias()).isEqualTo(0.5);
         assertThat(p10.getInput()).isEqualTo(0.0);
         assertThat(p10.getOutput()).isEqualTo(0.0);
+        assertThat(p10.getBias()).isEqualTo(0.5);
         assertThat(graph.getWeightedGraph().get(p00,p10)).isEqualTo(0.5);
 
 
@@ -133,40 +129,26 @@ public class GraphTestOneLayer {
         //forward
         graph.forward();
 
-        Double p10_output = 1.0-p00_output/2;
-
-        assertThat(graph.getError()).isEqualTo(p10_output);
+        Double p10_output = p00_output*0.5 + 0.5;
+        assertThat(graph.getOutput()).isEqualTo(p10_output);
+        assertThat(graph.getError()).isEqualTo(1-p10_output);
 
 
         graph.backwardTheta();
-        assertThat(p10.getTheta()).isEqualTo(p10_output);    //sameDifferentiation is 1
-        assertThat(p00.getTheta()).isEqualTo(p10_output*(1.0/2)*sigmoidDifferentiationL.apply(1.0));
+        assertThat(p10.getTheta()).isEqualTo(1-p10_output);    //sameDifferentiation is 1
+        assertThat(p00.getTheta()).isEqualTo((1-p10_output)*0.5*sigmoidDifferentiationL.apply(1.0));
 
 
         graph.backwardWeight();
-        assertThat(graph.getWeightedGraph().get(p00,p10)).isEqualTo(1.0/2 + 0.05*p00_output*p10_output);
+        assertThat(graph.getWeightedGraph().get(p00,p10)).isEqualTo(0.5 + 0.05*p00_output*(1-p10_output));
+        assertThat(p10.getBias()).isEqualTo(0.5 + 0.05*(1-p10_output));
 
 
 
 
+        //assert getting better
+        GraphTest.gettingBetter(graph);
 
-        int time = 1;
-
-        do{
-            time ++;
-            graph.train();
-
-            if(time % 1000 == 0){
-                System.out.println(time + ":" + graph.getOutput() +";" + graph.getError());
-            }
-
-        }while (graph.getError() > 0.001);
-
-        graph.beautifyWeightedGraphOutput();
-        System.out.println("\n" + time + ":" + graph.getOutput() +";" + graph.getError());
-
-
-        assertThat(graph.getWeightedGraph().get(p00,p10)).isCloseTo(1.0/sigmoid.apply(1.0), Offset.offset(0.01));
 
     }
 

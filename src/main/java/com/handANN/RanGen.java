@@ -1,3 +1,5 @@
+package com.handANN;
+
 import java.util.Random;
 
 /**
@@ -7,9 +9,9 @@ public class RanGen implements IRanGen {
 
     private Random random = new Random();
 
-    RanGen(){}  //no seed,use the default value(Current time)
+    public RanGen(){}  //no seed,use the default value(Current time)
 
-    RanGen(int seed){
+    public RanGen(int seed){
         random.setSeed(seed);
     }
 
