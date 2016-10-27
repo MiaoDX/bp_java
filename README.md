@@ -1,5 +1,6 @@
-This is a simple implement of `Backpropagation` in Java.
-
+% A simple implement of `Backpropagation` in Java.
+% MiaoDX MiaoDX@hotmail.com
+% Oct 28, 2016
 ## What we want to do.
 
 There are lots of amazing open source implements of ML(/DL) libraries,and before diving into these great porjects,I think it really necessary to implement a simple ANN just by hand.In this way,we will not treat these toolkits as `BlackBoxes` and just `Draw` a graph and hope that we will get nice performace after an uncertain time,on the other hand,we make sure that we `CAN` write an ANN or a simple part of it.
@@ -26,8 +27,12 @@ To not make this page too complex,THE DESIGN PRINCIPLES AND IMPLEMENTS DETAILS O
 
 ## ChangeLog
 
-20161025:An implement do things ok.
+TODO: USE `Guava.Graph` to reimplement it.
 
-20161004:Basic skeleton.
+20151026: Some visualization work.
+
+20161025: An implement do things ok.
+
+20161004: Basic skeleton.
 
 ## Good Luck & Have Fun. -- miaodx

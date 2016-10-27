@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <meta name="author" content="MiaoDX MiaoDX@hotmail.com" />
+  <title>A simple implement of Backpropagation in Java.</title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <link rel="stylesheet" type="text/css" media="screen, projection, print"
+    href="http://www.w3.org/Talks/Tools/Slidy2/styles/slidy.css" />
+  <script src="http://www.w3.org/Talks/Tools/Slidy2/scripts/slidy.js"
+    charset="utf-8" type="text/javascript"></script>
+</head>
+<body>
+<div class="slide titlepage">
+  <h1 class="title">A simple implement of <code>Backpropagation</code> in Java.</h1>
+  <p class="author">
+MiaoDX MiaoDX@hotmail.com
+  </p>
+  <p class="date">Oct 28, 2016</p>
+</div>
+<div id="what-we-want-to-do." class="slide section level2">
+<h2>What we want to do.</h2>
+<p>There are lots of amazing open source implements of ML(/DL) libraries,and before diving into these great porjects,I think it really necessary to implement a simple ANN just by hand.In this way,we will not treat these toolkits as <code>BlackBoxes</code> and just <code>Draw</code> a graph and hope that we will get nice performace after an uncertain time,on the other hand,we make sure that we <code>CAN</code> write an ANN or a simple part of it.</p>
+<p>In this repo,a java implement of <code>Backpropagation</code> is presented.</p>
+</div>
+<div id="reference" class="slide section level2">
+<h2>Reference</h2>
+<p>There are some great resources on the internet that explains BP,some clear,some mathematical,and some just too difficult or too complex for us(me especially) to understand.Here are some articals I think worth reading:</p>
+<ol style="list-style-type: decimal">
+<li><p><a href="https://zhuanlan.zhihu.com/p/22473137">神经网络反向传播的数学原理</a> [CHINESE]</p></li>
+<li><p><a href="https://theclevermachine.wordpress.com/tag/backpropagation/">A Gentle Introduction to Artificial Neural Networks</a></p></li>
+<li><p><a href="http://galaxy.agh.edu.pl/%7Evlsi/AI/backp_t_en/backprop.html">Principles of training multi-layer neural network using backpropagation</a></p></li>
+<li><p><a href="http://blog.csdn.net/wsywl/article/details/6364744">BP（Back Propagation）神经网络及Matlab矩阵实现</a> [CHINESE]</p></li>
+</ol>
+<p>At first,I wrote my codes according to the third article,but later I found that chances are that when calc the error(<span class="math inline"><em>δ</em></span>),it can be something wrong,and then I found the second one,It's awesome.But I still assist you read the third artical(first),for it's really expressive.</p>
+</div>
+<div id="design-and-implements" class="slide section level2">
+<h2>Design and implements</h2>
+<p>To not make this page too complex,THE DESIGN PRINCIPLES AND IMPLEMENTS DETAILS OR TRICKS CAN BE FOUND IN <a href="DesignAndImplement.md">doc/DesignAndImplement.md</a>,IT IS A GOOD ARTICLE -.-.</p>
+</div>
+<div id="changelog" class="slide section level2">
+<h2>ChangeLog</h2>
+<p>TODO: USE <code>Guava.Graph</code> to reimplement it.</p>
+<p>20151026: Some visualization work.</p>
+<p>20161025: An implement do things ok.</p>
+<p>20161004: Basic skeleton.</p>
+</div>
+<div id="good-luck-have-fun.----miaodx" class="slide section level2">
+<h2>Good Luck &amp; Have Fun. -- miaodx</h2>
+</div>
+</body>
+</html>

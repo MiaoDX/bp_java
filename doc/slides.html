@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <meta name="author" content="MiaoDX MiaoDX@hotmail.com" />
+  <title>Implements of Backpropagation in Java.</title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+  </style>
+  <link rel="stylesheet" type="text/css" media="screen, projection, print"
+    href="http://www.w3.org/Talks/Tools/Slidy2/styles/slidy.css" />
+  <script src="http://www.w3.org/Talks/Tools/Slidy2/scripts/slidy.js"
+    charset="utf-8" type="text/javascript"></script>
+</head>
+<body>
+<div class="slide titlepage">
+  <h1 class="title">Implements of <code>Backpropagation</code> in Java.</h1>
+  <p class="author">
+MiaoDX MiaoDX@hotmail.com
+  </p>
+  <p class="date">Oct 28, 2016</p>
+</div>
+<div id="statement" class="slide section level2">
+<h2>Statement</h2>
+<p>这里不证明 BP 算法，仅是利用已有结论（寻求证明可以参见 <code>README</code> 中的参考文章）来叙述如何使用 Java 实现此算法以及一些取舍与 tricks。</p>
+</div>
+<div id="analysis" class="slide section level2">
+<h2>Analysis</h2>
+<p>目前来看，整个算法是很简单的，但考虑到自己一开始时的茫然，想必应该是是“会了不难，难了不会”。直接给出本实现对应的示意图如下（取自 <a href="https://theclevermachine.wordpress.com/tag/backpropagation/">A Gentle Introduction to Artificial Neural Networks</a>）：</p>
+<div class="figure">
+<img src="pics/four_main_steps.png" alt="BP 算法的四个主要步骤" />
+<p class="caption">BP 算法的四个主要步骤</p>
+</div>
+<p>可以看出 I,II 的计算顺序是需要保证的，I 依次向后，II 依次向前，III 与 IV 的计算顺序随意（向后或向前均可）。需要特别注意的只有 II，编程时也是要注意这一点，特别是计算 <span class="math inline"><em>δ</em></span> 时需要考虑 <span class="math inline"><em>g</em><sub><em>k</em></sub></span> 在 <span class="math inline"><em>z</em><sub><em>k</em></sub></span> 上的导数值。</p>
+</div>
+<div id="data-structure" class="slide section level2">
+<h2>Data structure</h2>
+<p>从示意图可以看出，我们最好是能够构建出一个图出来，我没有进行太多的调查，也许是有不错的图的实现的 <del>发现了Guava 中有 Graph 的部分，下午看了一下，可以考虑重写一下了 -.-</del>，这里是自己手工构建了一个。</p>
+<p>有几个需要考虑的问题：</p>
+<ul>
+<li>图的表示</li>
+<li>图的层数</li>
+<li>顶点所包含的内容</li>
+</ul>
+<p>按照 <code>OO</code> 的设计准则，我们把上面四个步骤中的参数进行分配：</p>
+<p>图：顶点的连接（边）、边上的权重 <code>$w_{ij}$</code></p>
+<p>顶点：其余所有的参数（<code>$z_{k}$,$g_{k}$,$a_{k}$,$bias$</code>）</p>
+<p>其中，需要注意的是<code>激活函数$g_{k}$</code>的分配，赋给顶点会带来一定的空间开销（每个顶点都需要保存函数及其导函数），但是带来的好处是我们可以很方便地修改每个顶点对应的激活函数，这很方便测试（我们可以使用简单的函数进行测试），另外，在构建图时也需要对函数的选型做出调整，比如说对函数进行模拟时，最后一层（输出层）的激活函数可以考虑选为线性函数（比如 <code>$f(x)=x$</code>）。</p>
+<p>尝试画一个粒度很粗的 UML 图：</p>
+<div class="figure">
+<img src="pics/general_uml.png" alt="大致的 UML 图" />
+<p class="caption">大致的 UML 图</p>
+</div>
+</div>
+<div id="implement" class="titleslide slide section level1"><h1>Implement</h1></div><div id="遍历图" class="slide section level2">
+<h2>遍历图</h2>
+<p>在具体实现时，需要对图进行遍历（上面的 I,II,III,IV）均需要，只对点进行的操作（如更新 bias）还好说，但是对权值的存取都需要一个便于操作的数据结构，尝试了一些方式，最终选取 <code>[Guava](https://github.com/google/guava/wiki)</code> 中的 <code>HashBasedTable</code> 来做。</p>
+<p>需要注意的是如何有效地求取顶点的前驱与后继，这在目前的实现中不是很容易（/直观），需要对 <code>Table</code> 进行处理：</p>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java">[...]
+
+<span class="kw">private</span> Table&lt;<span class="bu">Point</span>, <span class="bu">Point</span>, <span class="bu">Double</span>&gt; weightedGraph = HashBasedTable.<span class="fu">create</span>();
+
+[...]
+<span class="kw">for</span>(<span class="bu">Map</span>.<span class="fu">Entry</span>&lt;<span class="bu">Point</span>, <span class="bu">Double</span>&gt; after: weightedGraph.<span class="fu">row</span>(nowPoint).<span class="fu">entrySet</span>()){
+                <span class="bu">Point</span> afterPoint = after.<span class="fu">getKey</span>();
+                <span class="fu">updateWeight</span>(nowPoint, afterPoint);
+}
+[...]</code></pre></div>
+</div><div id="遍历顶点的顺序" class="slide section level2">
+<h2>遍历顶点的顺序</h2>
+<p>上面的代码没有考虑 <code>nowPoint</code> 的选取顺序，在 <code>DEBUG</code> 中发现了一些有趣的问题，结果总是没道理的不对，且直接 <code>RUN</code> 与 <code>DEBUG</code> 的结果不同 <sub>.</sub>，这种情况首先是想到并发的问题，可明显没有并发啊！！一步步地跑，终于发现是遍历 <code>nowPoint</code> 的顺序并不固定。给个简单的例子：</p>
+<div class="figure">
+<img src="pics/a_network.png" alt="一个两层的网络" />
+<p class="caption">一个两层的网络</p>
+</div>
+<p>在前向传播时，原本是应该先计算 <code>$P_{10}$,$P_{11}$,$P_{12}$</code> 然后是计算 <code>$P_{20}$</code>，可是实际上没有对此顺序进行规定，所以实际上并不能保证正常运行。所以，新定义</p>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">private</span> <span class="bu">List</span>&lt;<span class="bu">Point</span>&gt; pointsInOrder = <span class="kw">new</span> <span class="bu">ArrayList</span>&lt;<span class="bu">Point</span>&gt;();</code></pre></div>
+<p>在遍历时按照此顺序进行就可以了（当然，反向遍历应该也是比较直观了）。</p>
+<p>将算法示意图中的步骤转化为代码在有了数据结构的定义后便很清晰了，这里便不再赘述。</p>
+</div><div id="激活函数相关" class="slide section level2">
+<h2>激活函数相关</h2>
+<p>激活函数一般有 <code>sigmoid,tanh,ReLU</code> 等，将激活函数写死是没有道理的，所以将其分配到了 <code>Point</code> 中，需要注意的是要能够比较方便地进行更变，在 Java 中原本实现“将函数作为参数传递”不太容易，比较幸运的是 Java8 引入了 <code>Lambda</code> 表达式，我们便是使用这来很方便地更改激活函数。</p>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">public</span> <span class="dt">static</span> Function&lt;<span class="bu">Double</span>,<span class="bu">Double</span>&gt; sigmoidLambda = input -&gt; <span class="fu">sigmoid</span>(input);</code></pre></div>
+<p>这样可以在外部引用此方法，然后调用其 <code>applay()</code> 即可。</p>
+</div><div id="显示结果" class="slide section level2">
+<h2>显示结果</h2>
+<p>我们在编写完成后，进行测试可以直接跟踪一些简单的图的几个步骤，比如 <code>GraphTestOneLayer.java</code> 中的 <code>oneLayerWithHalfAndSameActivationFunction</code> 便使用 <code>AssertJ</code>（其他的测试库亦可）来进行测试。</p>
+<p>但是最终，我们还要直观地展示结果才好啊。找寻了几个展示图标的库都不太理想，还好在 github 上尝试了一下，在 Java 下的绘图库中找到了 <a href="https://github.com/timmolter/XChart">XChart</a>，很不错，值得尝试（比较活跃，非常好的 tutorial） ^_^</p>
+<p>需要指出的是，在 <code>@Test</code> 中是不能正常显示的，解决方案是在绘图后 <code>Thread.sleep(10000)</code> 停个十秒，这有点不太理想，但 work。</p>
+<p>另外，展示时最好展示地多些，即比样本要更加密集，这样可以看出是不是仅仅是 fit 样本还是能比较好得模拟整个函数（这里是说我们对函数进行模拟时）。</p>
+</div>
+</body>
+</html>

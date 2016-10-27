@@ -1,3 +1,7 @@
+% Implements of `Backpropagation` in Java.
+% MiaoDX MiaoDX@hotmail.com
+% Oct 28, 2016
+
 ## Statement
 
 这里不证明 BP 算法，仅是利用已有结论（寻求证明可以参见 `README` 中的参考文章）来叙述如何使用 Java 实现此算法以及一些取舍与 tricks。
@@ -5,7 +9,7 @@
 
 ## Analysis
 
-目前来看，整个算法是很简单的，但考虑到自己一开始时的茫然，想必是“会了不难，难了不会”而已。直接给出本实现对应的示意图如下（取自 [A Gentle Introduction to Artificial Neural Networks](https://theclevermachine.wordpress.com/tag/backpropagation/)）：
+目前来看，整个算法是很简单的，但考虑到自己一开始时的茫然，想必应该是是“会了不难，难了不会”。直接给出本实现对应的示意图如下（取自 [A Gentle Introduction to Artificial Neural Networks](https://theclevermachine.wordpress.com/tag/backpropagation/)）：
 
 ![BP 算法的四个主要步骤](pics/four_main_steps.png)
 
@@ -34,9 +38,9 @@
 
 ![大致的 UML 图](pics/general_uml.png)
 
-## Implement
+# Implement
 
-### 遍历图
+## 遍历图
 
 在具体实现时，需要对图进行遍历（上面的 I,II,III,IV）均需要，只对点进行的操作（如更新 bias）还好说，但是对权值的存取都需要一个便于操作的数据结构，尝试了一些方式，最终选取 `[Guava](https://github.com/google/guava/wiki)` 中的 `HashBasedTable` 来做。
 
@@ -56,7 +60,7 @@ for(Map.Entry<Point, Double> after: weightedGraph.row(nowPoint).entrySet()){
 ```
 
 
-### 遍历顶点的顺序
+## 遍历顶点的顺序
 
 上面的代码没有考虑 `nowPoint` 的选取顺序，在 `DEBUG` 中发现了一些有趣的问题，结果总是没道理的不对，且直接 `RUN` 与 `DEBUG` 的结果不同 ~.~，这种情况首先是想到并发的问题，可明显没有并发啊！！一步步地跑，终于发现是遍历 `nowPoint` 的顺序并不固定。给个简单的例子：
 
@@ -72,7 +76,7 @@ private List<Point> pointsInOrder = new ArrayList<Point>();
 
 将算法示意图中的步骤转化为代码在有了数据结构的定义后便很清晰了，这里便不再赘述。
 
-### 激活函数相关
+## 激活函数相关
 
 激活函数一般有 `sigmoid,tanh,ReLU` 等，将激活函数写死是没有道理的，所以将其分配到了 `Point` 中，需要注意的是要能够比较方便地进行更变，在 Java 中原本实现“将函数作为参数传递”不太容易，比较幸运的是 Java8 引入了 `Lambda` 表达式，我们便是使用这来很方便地更改激活函数。
 
@@ -82,7 +86,7 @@ public static Function<Double,Double> sigmoidLambda = input -> sigmoid(input);
 
 这样可以在外部引用此方法，然后调用其 `applay()` 即可。
 
-### 显示结果
+## 显示结果
 
 我们在编写完成后，进行测试可以直接跟踪一些简单的图的几个步骤，比如 `GraphTestOneLayer.java` 中的 `oneLayerWithHalfAndSameActivationFunction` 便使用 `AssertJ`（其他的测试库亦可）来进行测试。
 
