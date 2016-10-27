@@ -23,17 +23,16 @@ public class FunctionFaux {
     private Function<Double, Double> matchingF;
 
 
-
     private List<Double> domainValues = new ArrayList<>();
     private List<Double> functionValues = null;
 
 
-    public FunctionFaux(IRanGen ranGen, Function<Double, Double> matchingF, Double domainStart, Double domainEnd, int num){
+    public FunctionFaux(IRanGen ranGen, Function<Double, Double> matchingF, Double domainStart, Double domainEnd, int num) {
 
 
-        double step = (domainEnd-domainStart)/(num-1);  //a little attention,to split [0,1] to 5 parts,step should be 1.0/4 ^_^
-        for(int i = 0;i < num;i ++){
-            domainValues.add(domainStart+i*step);
+        double step = (domainEnd - domainStart) / (num - 1);  //a little attention,to split [0,1] to 5 parts,step should be 1.0/4 ^_^
+        for (int i = 0; i < num; i++) {
+            domainValues.add(domainStart + i * step);
         }
 
         functionValues = domainValues.stream().map(v -> matchingF.apply(v)).collect(Collectors.toList());
@@ -47,9 +46,9 @@ public class FunctionFaux {
     }
 
 
-    public List<Double> getRandomNextInputAndTarget(){
+    public List<Double> getRandomNextInputAndTarget() {
         List<Double> doubles = new ArrayList<Double>();
-        double input = ranGen.nextDouble()*(domainEnd-domainStart)+domainStart;
+        double input = ranGen.nextDouble() * (domainEnd - domainStart) + domainStart;
         double target = matchingF.apply(input);
         doubles.add(input);
         doubles.add(target);

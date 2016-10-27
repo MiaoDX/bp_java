@@ -1,4 +1,5 @@
 package com.handANNTest;
+
 import com.handANN.RanGenFaux;
 import org.testng.annotations.Test;
 
@@ -7,9 +8,9 @@ import org.testng.annotations.Test;
  */
 public class IRanGenTest {
     @Test
-    public void testRanGenFaux(){
+    public void testRanGenFaux() {
         RanGenFaux ranGenFaux = new RanGenFaux();
-        for (int i = 0; i < 20; i ++){
+        for (int i = 0; i < 20; i++) {
             System.out.println(ranGenFaux.nextDouble());
         }
     }

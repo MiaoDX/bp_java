@@ -20,33 +20,31 @@ public class AreaLineChartWithXChart {
 
         Function OnePlusSinPiX = MatchingFunctions.OnePlusSinPiX;
 
-        FunctionFaux functionFaux = new FunctionFaux(ranGen,same,-2.0, 2.0, num);
+        FunctionFaux functionFaux = new FunctionFaux(ranGen, same, -2.0, 2.0, num);
 
         List<Double> x = functionFaux.getDomainValues();
         List<Double> y1 = functionFaux.getFunctionValues();
 
 
-        functionFaux = new FunctionFaux(ranGen,sinf,-2.0, 2.0, num);
+        functionFaux = new FunctionFaux(ranGen, sinf, -2.0, 2.0, num);
         List<Double> y2 = functionFaux.getFunctionValues();
         show(x, y1, y2);
     }
 
 
-
-
-    public static void show(List<Double> x,List<Double> y1, List<Double> y2, String picName) throws InterruptedException, IOException {
+    public static void show(List<Double> x, List<Double> y1, List<Double> y2, String picName) throws InterruptedException, IOException {
 // Create Chart
         XYChart chart = new XYChartBuilder().width(800).height(600).title("Check").xAxisTitle("x").yAxisTitle("f").build();
         XYSeries seriesLiability = chart.addSeries("Should be", x, y1);
         seriesLiability.setMarker(SeriesMarkers.NONE);
         chart.addSeries("We got", x, y2);
         new SwingWrapper<XYChart>(chart).displayChart();
-        BitmapEncoder.saveBitmap(chart,"./"+picName, BitmapEncoder.BitmapFormat.PNG);
+        BitmapEncoder.saveBitmap(chart, "./" + picName, BitmapEncoder.BitmapFormat.PNG);
         Thread.sleep(10000);
     }
 
-    public static void show(List<Double> x,List<Double> y1, List<Double> y2) throws InterruptedException, IOException{
-        show(x, y1, y2,"./Our_answer");
+    public static void show(List<Double> x, List<Double> y1, List<Double> y2) throws InterruptedException, IOException {
+        show(x, y1, y2, "./Our_answer");
 
     }
 }

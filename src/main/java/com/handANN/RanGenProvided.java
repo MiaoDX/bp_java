@@ -14,7 +14,7 @@ public class RanGenProvided implements IRanGen {
     int maxNum = 0;
 
 
-    public RanGenProvided(Double... args){
+    public RanGenProvided(Double... args) {
         int num = 0;
         for (Double arg : args) {
 //            System.out.println(arg);
@@ -33,7 +33,7 @@ public class RanGenProvided implements IRanGen {
     }
 
     public double nextDouble() {
-        nowIndex ++;
+        nowIndex++;
         return list.get(nowIndex);
     }
 }

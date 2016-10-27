@@ -8,8 +8,7 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static org.assertj.core.api.Assertions.*;
-
+import static org.assertj.core.api.Assertions.assertThat;
 
 
 /**
@@ -20,31 +19,31 @@ import static org.assertj.core.api.Assertions.*;
 /**
  * Test that we can pass function to classes and use them as a member
  */
-class FunctionAsPara{
+class FunctionAsPara {
     Function<Integer, Integer> function;
     int a = 100;
-    FunctionAsPara(Function<Integer, Integer> _function){
+
+    FunctionAsPara(Function<Integer, Integer> _function) {
         this.function = _function;
     }
 
-    public Integer f(){
+    public Integer f() {
         return function.apply(a);
     }
 }
 
 
-
 public class ActivationFuntionsTest {
 
     @Test
-    public void testFunctionAsPara(){
-        Function<Integer,Integer> function = a-> a + 1;
+    public void testFunctionAsPara() {
+        Function<Integer, Integer> function = a -> a + 1;
         FunctionAsPara functionAsPara = new FunctionAsPara(function);
         System.out.println(functionAsPara.f());
     }
 
     @Test
-    public void testUseFunctionInActivationFuntions(){
+    public void testUseFunctionInActivationFuntions() {
         FunctionAsPara functionAsPara = new FunctionAsPara(ActivationFuntions.fortest);
         assertThat(functionAsPara.f()).isEqualTo(200);
     }
@@ -54,7 +53,7 @@ public class ActivationFuntionsTest {
 
     //Function interface
 
-    void modifyTheValue(int valueToBeOperated, Function<Integer, Integer> function){
+    void modifyTheValue(int valueToBeOperated, Function<Integer, Integer> function) {
 
         int newValue = function.apply(valueToBeOperated);
 
@@ -67,30 +66,34 @@ public class ActivationFuntionsTest {
     }
 
     @Test
-    public void testFunction(){
+    public void testFunction() {
 
-        int incr = 20;  int myNumber = 10;
+        int incr = 20;
+        int myNumber = 10;
 
-        modifyTheValue(myNumber, val-> val + incr);
+        modifyTheValue(myNumber, val -> val + incr);
 
-        myNumber = 15;  modifyTheValue(myNumber, val-> val * 10);
+        myNumber = 15;
+        modifyTheValue(myNumber, val -> val * 10);
 
-        modifyTheValue(myNumber, val-> val - 100);
+        modifyTheValue(myNumber, val -> val - 100);
 
-        modifyTheValue(myNumber, val-> "somestring".length() + val - 100);
+        modifyTheValue(myNumber, val -> "somestring".length() + val - 100);
     }
 
 
     @Test
-    public void testMapFun(){
+    public void testMapFun() {
         Function<Double, Double> function = ActivationFuntions.halfLambda;
 
         List<Double> list = new ArrayList<>();
-        list.add(1.0);list.add(2.0);list.add(3.0);
+        list.add(1.0);
+        list.add(2.0);
+        list.add(3.0);
 
         List<Double> list1 = list.stream().map(d -> function.apply(d)).collect(Collectors.toList());
 
-        for(Double l : list1){
+        for (Double l : list1) {
             System.out.println(l);
         }
 

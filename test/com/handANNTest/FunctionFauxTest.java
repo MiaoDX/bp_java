@@ -9,6 +9,7 @@ import org.testng.annotations.Test;
 import java.util.List;
 import java.util.Random;
 import java.util.function.Function;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
@@ -16,25 +17,25 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 public class FunctionFauxTest {
     @Test
-    public void FunctionFaux(){
+    public void FunctionFaux() {
         //IRanGen ranGen = new RanGenFaux();
         IRanGen ranGen = new RanGen(0);
         int num = 100;
 
         Function<Double, Double> f = MatchingFunctions.sinF;
 
-        FunctionFaux functionFaux = new FunctionFaux(ranGen,f,-Math.PI,Math.PI,num);
+        FunctionFaux functionFaux = new FunctionFaux(ranGen, f, -Math.PI, Math.PI, num);
 
 //        FunctionFaux functionFaux = new FunctionFaux(ranGen,f,-1.0,1.0,num);
 
-        for(int i = 0;i < num; i ++){
+        for (int i = 0; i < num; i++) {
             //System.out.println(functionFaux.getRandomNextInputAndTarget());
         }
 
         List<Double> domainValues = functionFaux.getDomainValues();
         List<Double> functionValues = functionFaux.getFunctionValues();
 
-        for(int i = 0;i < num;i ++){
+        for (int i = 0; i < num; i++) {
             System.out.println(domainValues.get(i) + ":" + functionValues.get(i));
             assertThat(f.apply(domainValues.get(i))).isEqualTo(functionValues.get(i));
         }
@@ -43,16 +44,16 @@ public class FunctionFauxTest {
 
 
     @Test
-    public void testRandom(){
-        double a = -10,b = 10;
+    public void testRandom() {
+        double a = -10, b = 10;
 
         Random r = new Random();
 
-        Function<Integer, Double> rangeRandom = input -> r.nextDouble()*(b-a)+a;
+        Function<Integer, Double> rangeRandom = input -> r.nextDouble() * (b - a) + a;
 
-        for(int i = 0;i < 1000000;i ++){
+        for (int i = 0; i < 1000000; i++) {
 //            System.out.println(rangeRandom.apply(i));
-            assertThat(rangeRandom.apply(i)).isBetween(a,b);
+            assertThat(rangeRandom.apply(i)).isBetween(a, b);
 
         }
 

@@ -12,9 +12,9 @@ public class RanGenFaux implements IRanGen {
     int nowIndex = -1;
     int maxNum = 100;
 
-    public RanGenFaux(){
-        for(int i = 0; i < maxNum; i ++){
-            list.add(((double)i)/maxNum);
+    public RanGenFaux() {
+        for (int i = 0; i < maxNum; i++) {
+            list.add(((double) i) / maxNum);
         }
     }
 
@@ -27,7 +27,7 @@ public class RanGenFaux implements IRanGen {
     }
 
     public double nextDouble() {
-        nowIndex ++;
+        nowIndex++;
         return list.get(nowIndex);
     }
 }

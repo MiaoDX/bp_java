@@ -18,27 +18,21 @@ public class Point {
     private Function<Double, Double> activationF = ActivationFuntions.sigmoidLambda;
     private Function<Double, Double> differentiationF = ActivationFuntions.sigmoidDifferentiationLambda;
 
-    public Point(int layer, int number){
+    public Point(int layer, int number) {
         this.layer = layer;
         this.number = number;
     }
 
-
-
-
-    @Override
-    public String toString(){
-        return JSON.toJSONString(this);
-    }
-
-
-
-
     public static void main(String[] args) {
-        Point point = new Point(1,2);
+        Point point = new Point(1, 2);
         System.out.println(point);
 
 
+    }
+
+    @Override
+    public String toString() {
+        return JSON.toJSONString(this);
     }
 
     public int getLayer() {

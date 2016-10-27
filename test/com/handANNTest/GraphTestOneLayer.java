@@ -21,17 +21,17 @@ public class GraphTestOneLayer {
      * p00 with a halfActivationF
      * p10 with a sameActivationF
      * At first,weight is set to 0.5
-     *
+     * <p>
      * So is "f(x) = 1/2 x * weight"
-     *
+     * <p>
      * We use (1.0, 1.0) as the goal,it should finally make `weight` to 2
-     *
+     * <p>
      * We track the first run and the final answer.SEEMS OK.
      */
     @Test
-    public void oneLayerWithHalfAndSameActivationFunction(){
-        Point p00 = new Point(0,0);
-        Point p10 = new Point(1,0);
+    public void oneLayerWithHalfAndSameActivationFunction() {
+        Point p00 = new Point(0, 0);
+        Point p10 = new Point(1, 0);
         p00.setActivationF(ActivationFuntions.halfLambda);
         p00.setDifferentiationF(ActivationFuntions.halfDifferentiationLambda);
 
@@ -46,36 +46,33 @@ public class GraphTestOneLayer {
         pointsOrder.add(p10);
 
         IRanGen ranGen = new RanGenProvided(0.5, 0.5, 0.5);//one for p00->p01, two for bias
-        Graph graph = new Graph(linkedHashMultimap,pointsOrder,ranGen);
-
+        Graph graph = new Graph(linkedHashMultimap, pointsOrder, ranGen);
 
 
         //init
-        graph.updateGraph(1.0,1.0);
+        graph.updateGraph(1.0, 1.0);
         assertThat(p00.getInput()).isEqualTo(1.0);
         assertThat(p00.getOutput()).isEqualTo(0.5);
         assertThat(p00.getBias()).isEqualTo(0.5);
         assertThat(p10.getInput()).isEqualTo(0.0);
         assertThat(p10.getOutput()).isEqualTo(0.0);
         assertThat(p10.getBias()).isEqualTo(0.5);
-        assertThat(graph.getWeightedGraph().get(p00,p10)).isEqualTo(0.5);
-
-
+        assertThat(graph.getWeightedGraph().get(p00, p10)).isEqualTo(0.5);
 
 
         //forward
         graph.forward();
-        assertThat(graph.getError()).isEqualTo(1.0/4);
+        assertThat(graph.getError()).isEqualTo(1.0 / 4);
 
 
         graph.backwardTheta();
-        assertThat(p10.getTheta()).isEqualTo(1.0/4);    //sameDifferentiation is 1
-        assertThat(p00.getTheta()).isEqualTo(1.0/16);
+        assertThat(p10.getTheta()).isEqualTo(1.0 / 4);    //sameDifferentiation is 1
+        assertThat(p00.getTheta()).isEqualTo(1.0 / 16);
 
 
         graph.backwardWeight();
-        assertThat(graph.getWeightedGraph().get(p00,p10)).isEqualTo(81.0/160);
-        assertThat(p10.getBias()).isEqualTo(0.5 + 0.05*(1.0/4));
+        assertThat(graph.getWeightedGraph().get(p00, p10)).isEqualTo(81.0 / 160);
+        assertThat(p10.getBias()).isEqualTo(0.5 + 0.05 * (1.0 / 4));
 
 
         //assert getting better
@@ -85,13 +82,10 @@ public class GraphTestOneLayer {
     }
 
 
-
-
-
     @Test
-    public void oneLayerWithSigmoidAndSameActivationFunction(){
-        Point p00 = new Point(0,0);
-        Point p10 = new Point(1,0);
+    public void oneLayerWithSigmoidAndSameActivationFunction() {
+        Point p00 = new Point(0, 0);
+        Point p10 = new Point(1, 0);
 
         p10.setActivationF(ActivationFuntions.sameLambda);
         p10.setDifferentiationF(ActivationFuntions.sameDifferentiationLambda);
@@ -104,14 +98,14 @@ public class GraphTestOneLayer {
         pointsOrder.add(p10);
 
         IRanGen ranGen = new RanGenProvided(0.5, 0.5, 0.5);//one for p00->p01, two for bias
-        Graph graph = new Graph(linkedHashMultimap,pointsOrder,ranGen);
+        Graph graph = new Graph(linkedHashMultimap, pointsOrder, ranGen);
 
 
-        Function<Double,Double> sigmoid = ActivationFuntions.sigmoidLambda;
-        Function<Double,Double> sigmoidDifferentiationL = ActivationFuntions.sigmoidDifferentiationLambda;
+        Function<Double, Double> sigmoid = ActivationFuntions.sigmoidLambda;
+        Function<Double, Double> sigmoidDifferentiationL = ActivationFuntions.sigmoidDifferentiationLambda;
 
         //init
-        graph.updateGraph(1.0,1.0);
+        graph.updateGraph(1.0, 1.0);
         assertThat(p00.getInput()).isEqualTo(1.0);
 
         Double p00_output = sigmoid.apply(1.0);
@@ -121,29 +115,25 @@ public class GraphTestOneLayer {
         assertThat(p10.getInput()).isEqualTo(0.0);
         assertThat(p10.getOutput()).isEqualTo(0.0);
         assertThat(p10.getBias()).isEqualTo(0.5);
-        assertThat(graph.getWeightedGraph().get(p00,p10)).isEqualTo(0.5);
-
-
+        assertThat(graph.getWeightedGraph().get(p00, p10)).isEqualTo(0.5);
 
 
         //forward
         graph.forward();
 
-        Double p10_output = p00_output*0.5 + 0.5;
+        Double p10_output = p00_output * 0.5 + 0.5;
         assertThat(graph.getOutput()).isEqualTo(p10_output);
-        assertThat(graph.getError()).isEqualTo(1-p10_output);
+        assertThat(graph.getError()).isEqualTo(1 - p10_output);
 
 
         graph.backwardTheta();
-        assertThat(p10.getTheta()).isEqualTo(1-p10_output);    //sameDifferentiation is 1
-        assertThat(p00.getTheta()).isEqualTo((1-p10_output)*0.5*sigmoidDifferentiationL.apply(1.0));
+        assertThat(p10.getTheta()).isEqualTo(1 - p10_output);    //sameDifferentiation is 1
+        assertThat(p00.getTheta()).isEqualTo((1 - p10_output) * 0.5 * sigmoidDifferentiationL.apply(1.0));
 
 
         graph.backwardWeight();
-        assertThat(graph.getWeightedGraph().get(p00,p10)).isEqualTo(0.5 + 0.05*p00_output*(1-p10_output));
-        assertThat(p10.getBias()).isEqualTo(0.5 + 0.05*(1-p10_output));
-
-
+        assertThat(graph.getWeightedGraph().get(p00, p10)).isEqualTo(0.5 + 0.05 * p00_output * (1 - p10_output));
+        assertThat(p10.getBias()).isEqualTo(0.5 + 0.05 * (1 - p10_output));
 
 
         //assert getting better
@@ -151,8 +141,6 @@ public class GraphTestOneLayer {
 
 
     }
-
-
 
 
 }

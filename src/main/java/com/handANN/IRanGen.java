@@ -5,6 +5,8 @@ package com.handANN;
  */
 public interface IRanGen {
     public int getMaxNum();
+
     public boolean hasNext();
+
     public double nextDouble();
 }

@@ -14,19 +14,19 @@ import java.util.List;
  */
 public class XChartTest {
     public static void main(String[] args) throws IOException {
-        double[] xData = new double[] { 0.0, 1.0, 2.0 };
-        double[] yData1 = new double[] { 2.0, 1.0, 0.0 };
-        double[] yData2 = new double[] { 1.0, 2.0, 3.0 };
+        double[] xData = new double[]{0.0, 1.0, 2.0};
+        double[] yData1 = new double[]{2.0, 1.0, 0.0};
+        double[] yData2 = new double[]{1.0, 2.0, 3.0};
 
-        Double[] xDataD = new Double[] { 0.0, 1.0, 2.0 };
-        Double[] yDataD = new Double[] { 2.0, 1.0, 0.0 };
+        Double[] xDataD = new Double[]{0.0, 1.0, 2.0};
+        Double[] yDataD = new Double[]{2.0, 1.0, 0.0};
 
         List<Double> x = Arrays.asList(xDataD);
         List<Double> y = Arrays.asList(yDataD);
 
-        double[][] yData = {yData1,yData2};
+        double[][] yData = {yData1, yData2};
 
-        String[] seriesNames = {"y1(x)","y2(x)"};
+        String[] seriesNames = {"y1(x)", "y2(x)"};
 
         //getChart(String chartTitle, String xTitle, String yTitle, String[] seriesNames, double[] xData, double[][] yData) {
 

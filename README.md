@@ -18,11 +18,11 @@ There are some great resources on the internet that explains BP,some clear,some 
 
 4. [BP（Back Propagation）神经网络及Matlab矩阵实现 ](http://blog.csdn.net/wsywl/article/details/6364744) [CHINESE]
 
-At first,I wrote my codes according to the third article,but later I found that chances are that when calc the error(\theta),it can be something wrong,and then I found the second one,It's awesome.But I still assist you read the third artical(first),for it's really expressive.
+At first,I wrote my codes according to the third article,but later I found that chances are that when calc the error($\delta$),it can be something wrong,and then I found the second one,It's awesome.But I still assist you read the third artical(first),for it's really expressive.
 
 ## Design and implements
 
-To not make this page too complex,the design principles and implements details or tricks can be found in [DesignAndImplement.md](DesignAndImplement.md).
+To not make this page too complex,THE DESIGN PRINCIPLES AND IMPLEMENTS DETAILS OR TRICKS CAN BE FOUND IN [doc/DesignAndImplement.md](DesignAndImplement.md),IT IS A GOOD ARTICLE -.-.
 
 ## ChangeLog
 

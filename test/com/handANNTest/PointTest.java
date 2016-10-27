@@ -8,8 +8,8 @@ import org.testng.annotations.Test;
 
 public class PointTest {
     @Test
-    public void testPoint(){
-        Point p = new Point(1,2);
+    public void testPoint() {
+        Point p = new Point(1, 2);
         System.out.println(p);
         //assertThat(p.toString()).isEqualTo("{layer:1,number:2}");
     }

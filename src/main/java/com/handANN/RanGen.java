@@ -9,9 +9,10 @@ public class RanGen implements IRanGen {
 
     private Random random = new Random();
 
-    public RanGen(){}  //no seed,use the default value(Current time)
+    public RanGen() {
+    }  //no seed,use the default value(Current time)
 
-    public RanGen(int seed){
+    public RanGen(int seed) {
         random.setSeed(seed);
     }
 

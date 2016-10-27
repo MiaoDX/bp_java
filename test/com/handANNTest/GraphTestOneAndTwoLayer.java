@@ -21,9 +21,9 @@ import java.util.List;
 public class GraphTestOneAndTwoLayer {
 
     @Test
-    public void oneLayer(){
-        Point p00 = new Point(0,0);
-        Point p10 = new Point(1,0);
+    public void oneLayer() {
+        Point p00 = new Point(0, 0);
+        Point p10 = new Point(1, 0);
         LinkedHashMultimap<Point, Point> linkedHashMultimap = LinkedHashMultimap.create();
         linkedHashMultimap.put(p00, p10);
         List<Point> pointsOrder = new ArrayList<Point>();
@@ -31,33 +31,33 @@ public class GraphTestOneAndTwoLayer {
         pointsOrder.add(p10);
 
         IRanGen ranGen = new RanGen(0);
-        Graph graph = new Graph(linkedHashMultimap,pointsOrder,ranGen);
+        Graph graph = new Graph(linkedHashMultimap, pointsOrder, ranGen);
 
-        graph.updateGraph(1,1);
+        graph.updateGraph(1, 1);
 
         int time = 0;
 
-        do{
-            time ++;
+        do {
+            time++;
             graph.train();
 
-            if(time % 1000 == 0){
-                System.out.println(time + ":" + graph.getOutput() +";" + graph.getError());
+            if (time % 1000 == 0) {
+                System.out.println(time + ":" + graph.getOutput() + ";" + graph.getError());
             }
 
 
-        }while (graph.getError() > 0.001);
+        } while (graph.getError() > 0.001);
 
-        System.out.println("\n" + time + ":" + graph.getOutput() +";" + graph.getError());
+        System.out.println("\n" + time + ":" + graph.getOutput() + ";" + graph.getError());
 
     }
 
 
-//    @Test
-    public void twoLayer(){
-        Point p00 = new Point(0,0);
-        Point p10 = new Point(1,0);
-        Point p20 = new Point(2,0);
+    //    @Test
+    public void twoLayer() {
+        Point p00 = new Point(0, 0);
+        Point p10 = new Point(1, 0);
+        Point p20 = new Point(2, 0);
 
         LinkedHashMultimap<Point, Point> linkedHashMultimap = LinkedHashMultimap.create();
         linkedHashMultimap.put(p00, p10);
@@ -69,24 +69,24 @@ public class GraphTestOneAndTwoLayer {
         pointsOrder.add(p20);
 
         IRanGen ranGen = new RanGen(0);
-        Graph graph = new Graph(linkedHashMultimap,pointsOrder,ranGen);
+        Graph graph = new Graph(linkedHashMultimap, pointsOrder, ranGen);
 
-        graph.updateGraph(1,1);
+        graph.updateGraph(1, 1);
 
         int time = 0;
 
-        do{
-            time ++;
+        do {
+            time++;
 
             graph.train();
 
-            if(time % 1000 == 0){
-                System.out.println(time + ":" + graph.getOutput() +";" + graph.getError());
+            if (time % 1000 == 0) {
+                System.out.println(time + ":" + graph.getOutput() + ";" + graph.getError());
             }
 
-        }while (graph.getError() > 0.001);
+        } while (graph.getError() > 0.001);
 
-        System.out.println("\n" + time + ":" + graph.getOutput() +";" + graph.getError());
+        System.out.println("\n" + time + ":" + graph.getOutput() + ";" + graph.getError());
     }
 
 }

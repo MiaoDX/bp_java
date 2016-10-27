@@ -28,22 +28,22 @@ public class RanGenProvidedTest {
         }
     }
 
-//    @Test
-    public void testNoStaticArgs(){
+    //    @Test
+    public void testNoStaticArgs() {
         test();
         test("aaa");
         test("aaa", "bbb");
         test("aaa", "bbb", "ccc");
         test2(0.1);
-        test2(0.1,0.2);
+        test2(0.1, 0.2);
     }
 
 
     @Test
-    public void testRanGenProvided(){
+    public void testRanGenProvided() {
         logger.info("Now testRanGenProvided");
-        IRanGen ranGen = new RanGenProvided(0.1,0.2,0.3);
-        while (ranGen.hasNext()){
+        IRanGen ranGen = new RanGenProvided(0.1, 0.2, 0.3);
+        while (ranGen.hasNext()) {
             System.out.println(ranGen.nextDouble());
         }
     }
