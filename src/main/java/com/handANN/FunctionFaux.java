@@ -26,6 +26,8 @@ public class FunctionFaux {
     private List<Double> domainValues = new ArrayList<>();
     private List<Double> functionValues = null;
 
+    private List<Double> widenDomainValues = new ArrayList<>();
+    private List<Double> widenFunctionValues = null;
 
     public FunctionFaux(IRanGen ranGen, Function<Double, Double> matchingF, Double domainStart, Double domainEnd, int num) {
 
@@ -45,6 +47,21 @@ public class FunctionFaux {
         this.num = num;
     }
 
+    public void widenDomain(int widenSize){ //wide the domain and function value for better plot performance
+        double oldGap = domainEnd - domainStart;
+        double widenDomainStart = domainStart - oldGap*widenSize/2;
+        double widenDomainEnd = domainEnd + oldGap*widenSize/2;
+
+        int newNum = widenSize*num*2;   // multiply 2 is to generate more dense points
+
+        double newStep = (widenDomainEnd - widenDomainStart) / (newNum - 1);
+
+        for (int i = 0; i < newNum; i++) {
+            widenDomainValues.add(widenDomainStart + i * newStep);
+        }
+
+        widenFunctionValues = widenDomainValues.stream().map(v -> matchingF.apply(v)).collect(Collectors.toList());
+    }
 
     public List<Double> getRandomNextInputAndTarget() {
         List<Double> doubles = new ArrayList<Double>();
@@ -61,6 +78,14 @@ public class FunctionFaux {
 
     public List<Double> getFunctionValues() {
         return functionValues;
+    }
+
+    public List<Double> getWidenDomainValues() {
+        return widenDomainValues;
+    }
+
+    public List<Double> getWidenFunctionValues() {
+        return widenFunctionValues;
     }
 
 

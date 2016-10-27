@@ -16,5 +16,6 @@ public class MatchingFunctions {
 
     public static Function<Double, Double> OnePlusSinPiX = input -> 1.0 + Math.sin(Math.PI * input);
 
+    public static Function<Double, Double> FiveSinADDFourCosX = input -> 5.0*Math.sin(input) + 4.0*Math.cos(input);
 
 }

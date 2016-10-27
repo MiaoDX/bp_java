@@ -44,15 +44,51 @@ public class GraphTest {
         List<Double> x = functionFaux.getDomainValues();
         List<Double> shouldY = functionFaux.getFunctionValues();
 
-        List<Double> weGot = new ArrayList<>();
+        List<Double> weGotY = new ArrayList<>();
 
         for (Double i : x) {
             graph.updateGraph(i, 0.0);//Just for test,so set output zero
             graph.forward();
-            weGot.add(graph.getOutput());
+            weGotY.add(graph.getOutput());
         }
 
-        AreaLineChartWithXChart.show(x, shouldY, weGot);
+        functionFaux.widenDomain(1);
+
+        List<Double> moreX = functionFaux.getWidenDomainValues();
+        List<Double> moreY = functionFaux.getWidenFunctionValues();
+        List<Double> weGotMoreY = new ArrayList<>();
+        for(Double i : moreX){
+            graph.updateGraph(i, 0.0);
+            graph.forward();
+            weGotMoreY.add(graph.getOutput());
+        }
+
+
+        AreaLineChartWithXChart.show(x, shouldY, weGotY, "Sample_Answer");
+        Thread.sleep(5000);
+        AreaLineChartWithXChart.show(moreX, moreY, weGotMoreY, "Just_more_Answer");
+        Thread.sleep(5000);
+
+
+        List<List<Double>> moreXandAllY = new ArrayList<>();
+        moreXandAllY.add(x);
+        moreXandAllY.add(shouldY);
+        moreXandAllY.add(weGotY);
+
+        moreXandAllY.add(moreX);
+        moreXandAllY.add(moreY);
+        moreXandAllY.add(weGotMoreY);
+
+        List<String> moreXandAllYName = new ArrayList<>();
+        moreXandAllYName.add("X");
+        moreXandAllYName.add("sample truth");
+        moreXandAllYName.add("we get at sample");
+        moreXandAllYName.add("more X");
+        moreXandAllYName.add("more truth");
+        moreXandAllYName.add("we get at more");
+
+        AreaLineChartWithXChart.show(moreXandAllY, moreXandAllYName, "MoreAnswer");
+
         System.out.println("######################");
     }
 
@@ -88,7 +124,7 @@ public class GraphTest {
         Point p11 = new Point(1, 1);
         Point p12 = new Point(1, 2);
         Point p13 = new Point(1, 3);
-        Point p14 = new Point(1, 4);
+
 
         Point p20 = new Point(2, 0);
 
@@ -98,14 +134,21 @@ public class GraphTest {
         linkedHashMultimap.put(p00, p11);
         linkedHashMultimap.put(p00, p12);
         linkedHashMultimap.put(p00, p13);
-        linkedHashMultimap.put(p00, p14);
 
         linkedHashMultimap.put(p10, p20);
         linkedHashMultimap.put(p11, p20);
         linkedHashMultimap.put(p12, p20);
         linkedHashMultimap.put(p13, p20);
+
+        /* the fourth point */
+        Point p14 = new Point(1, 4);
+        linkedHashMultimap.put(p00, p14);
         linkedHashMultimap.put(p14, p20);
 
+        /* the fifth point */
+        Point p15 = new Point(1, 5);
+        linkedHashMultimap.put(p00, p15);
+        linkedHashMultimap.put(p15, p20);
 
         List<Point> pointsOrder = new ArrayList<Point>();
         pointsOrder.add(p00);
@@ -114,6 +157,7 @@ public class GraphTest {
         pointsOrder.add(p12);
         pointsOrder.add(p13);
         pointsOrder.add(p14);
+        pointsOrder.add(p15);
         pointsOrder.add(p20);
 
 
@@ -123,18 +167,19 @@ public class GraphTest {
         IRanGen ranGen = new RanGen(0);
         Graph graph = new Graph(linkedHashMultimap, pointsOrder, ranGen, 0.1);
 
-        int num = 50;
+        int num = 100;
 
         Function sinf = MatchingFunctions.sinF;
         Function same = ActivationFuntions.sameLambda;
         Function ThreeSinAddTwoCos = MatchingFunctions.ThreeSinAddTwoCos;
         Function OnePlusThreeSinAddTwoCos = MatchingFunctions.OnePlusThreeSinAddTwoCos;
         Function OnePlusSinPiX = MatchingFunctions.OnePlusSinPiX;
+        Function FiveSinADDFourCosX = MatchingFunctions.FiveSinADDFourCosX;
 
-        FunctionFaux functionFaux = new FunctionFaux(ranGen, OnePlusSinPiX, -2.0, 2.0, num);
+        FunctionFaux functionFaux = new FunctionFaux(ranGen, same, -Math.PI, Math.PI, num);
 
         int time = 0;
-        double allowedError = 0.01;
+        double allowedError = 0.001;
         double sumMSE = 0.0;
         double oldMSE = 1000;
 
