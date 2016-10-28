@@ -127,6 +127,23 @@ MiaoDX MiaoDX@hotmail.com
 <p>但是最终，我们还要直观地展示结果才好啊。找寻了几个展示图标的库都不太理想，还好在 github 上尝试了一下，在 Java 下的绘图库中找到了 <a href="https://github.com/timmolter/XChart">XChart</a>，很不错，值得尝试（比较活跃，非常好的 tutorial） ^_^</p>
 <p>需要指出的是，在 <code>@Test</code> 中是不能正常显示的，解决方案是在绘图后 <code>Thread.sleep(10000)</code> 停个十秒，这有点不太理想，但 work。</p>
 <p>另外，展示时最好展示地多些，即比样本要更加密集，这样可以看出是不是仅仅是 fit 样本还是能比较好得模拟整个函数（这里是说我们对函数进行模拟时）。</p>
+<p>下面是几组实验结果，采取的都是隐藏层定点数为 5，且只有一个输入输出，除输出节点外的激活函数均为 <code>sigmoid</code>，输出节点激活函数为 <code>f(x)=x</code>，，最大 epoch 数为 <code>150000</code>，允许的最大均方误差 MSE 为 <code>1e-5</code>，选取的样本数为 <code>(-2,2)</code> 上的 <code>100</code> 个样本点.</p>
+<p>选取模拟函数为 <code>f(x)=sin(x)</code>，结果如下： 跑完了所有 epoch，均方差为 <code>8.247846382078843E-4</code>，一些图标如下：</p>
+<p>样本集上的拟合结果：</p>
+<div class="figure">
+<img src="pics/sinF_Sample_Answer.png" alt="样本集" />
+<p class="caption">样本集</p>
+</div>
+<p>自定义域扩大一倍，采样点密集程度扩大一倍（点数是之前的四倍）：</p>
+<div class="figure">
+<img src="pics/siF_more_Answer.png" alt="更多的点" />
+<p class="caption">更多的点</p>
+</div>
+<p>均方差变化：</p>
+<div class="figure">
+<img src="pics/sinF_error.png" alt="均方差变化" />
+<p class="caption">均方差变化</p>
+</div>
 </div>
 </body>
 </html>

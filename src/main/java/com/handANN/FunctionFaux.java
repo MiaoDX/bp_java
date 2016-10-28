@@ -28,6 +28,8 @@ public class FunctionFaux {
 
     private List<Double> widenDomainValues = new ArrayList<>();
     private List<Double> widenFunctionValues = null;
+    private List<Double> denseDomainValues = new ArrayList<>();
+    private List<Double> denseFunctionValues = null;
 
     public FunctionFaux(IRanGen ranGen, Function<Double, Double> matchingF, Double domainStart, Double domainEnd, int num) {
 
@@ -47,7 +49,7 @@ public class FunctionFaux {
         this.num = num;
     }
 
-    public void widenDomain(int widenSize){ //wide the domain and function value for better plot performance
+    public void widenDomainAndRemoveSampleSet(int widenSize){ //wide the domain and function value for better plot performance
         double oldGap = domainEnd - domainStart;
         double widenDomainStart = domainStart - oldGap*widenSize/2;
         double widenDomainEnd = domainEnd + oldGap*widenSize/2;
@@ -60,8 +62,36 @@ public class FunctionFaux {
             widenDomainValues.add(widenDomainStart + i * newStep);
         }
 
+        System.out.println();
+
+        // remove the sample set
+        widenDomainValues = widenDomainValues.stream().filter(d -> !domainValues.contains(d)).collect(Collectors.toList());
+
         widenFunctionValues = widenDomainValues.stream().map(v -> matchingF.apply(v)).collect(Collectors.toList());
     }
+
+    public void denseDomainAndRemoveSampleSet(int denseSize){ //wide the domain and function value for better plot performance
+
+
+        int newNum = denseSize*num;   // multiply 2 is to generate more dense points
+
+        double newStep = (domainEnd - domainStart) / (newNum - 1);
+
+        for (int i = 0; i < newNum; i++) {
+            denseDomainValues.add(domainStart + i * newStep);
+        }
+
+        System.out.println();
+
+        // remove the sample set
+        denseDomainValues = denseDomainValues.stream().filter(d -> !domainValues.contains(d)).collect(Collectors.toList());
+
+        denseFunctionValues = denseDomainValues.stream().map(v -> matchingF.apply(v)).collect(Collectors.toList());
+    }
+
+
+
+
 
     public List<Double> getRandomNextInputAndTarget() {
         List<Double> doubles = new ArrayList<Double>();
@@ -87,6 +117,20 @@ public class FunctionFaux {
     public List<Double> getWidenFunctionValues() {
         return widenFunctionValues;
     }
+    public List<Double> getDenseDomainValues() {
+        return denseDomainValues;
+    }
 
+    public void setDenseDomainValues(List<Double> denseDomainValues) {
+        this.denseDomainValues = denseDomainValues;
+    }
+
+    public List<Double> getDenseFunctionValues() {
+        return denseFunctionValues;
+    }
+
+    public void setDenseFunctionValues(List<Double> denseFunctionValues) {
+        this.denseFunctionValues = denseFunctionValues;
+    }
 
 }

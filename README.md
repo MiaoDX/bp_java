@@ -1,11 +1,11 @@
-% A simple implement of `Backpropagation` in Java.
+% A simple implementation of `Backpropagation` in Java.
 % MiaoDX MiaoDX@hotmail.com
-% Oct 28, 2016
+% Oct, 2016
 ## What we want to do.
 
 There are lots of amazing open source implements of ML(/DL) libraries,and before diving into these great porjects,I think it really necessary to implement a simple ANN just by hand.In this way,we will not treat these toolkits as `BlackBoxes` and just `Draw` a graph and hope that we will get nice performace after an uncertain time,on the other hand,we make sure that we `CAN` write an ANN or a simple part of it.
 
-In this repo,a java implement of `Backpropagation` is presented.
+In this repo,a java implementation of `Backpropagation` is presented.
 
 ## Reference
 
@@ -21,9 +21,9 @@ There are some great resources on the internet that explains BP,some clear,some 
 
 At first,I wrote my codes according to the third article,but later I found that chances are that when calc the error($\delta$),it can be something wrong,and then I found the second one,It's awesome.But I still assist you read the third artical(first),for it's really expressive.
 
-## Design and implements
+## Design and implementation
 
-To not make this page too complex,THE DESIGN PRINCIPLES AND IMPLEMENTS DETAILS OR TRICKS CAN BE FOUND IN [doc/DesignAndImplement.md](DesignAndImplement.md),IT IS A GOOD ARTICLE -.-.
+To not make this page too complex,THE DESIGN PRINCIPLES AND IMPLEMENTATIONS DETAILS OR TRICKS CAN BE FOUND IN [doc/DesignAndImplement.md](DesignAndImplement.md),IT IS A GOOD ARTICLE -.-.
 
 ## ChangeLog
 

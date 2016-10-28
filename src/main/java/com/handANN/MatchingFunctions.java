@@ -18,4 +18,8 @@ public class MatchingFunctions {
 
     public static Function<Double, Double> FiveSinADDFourCosX = input -> 5.0*Math.sin(input) + 4.0*Math.cos(input);
 
+    public static Function<Double, Double> OnePlusTwoSinPlusThreeExp = input -> 1.0 + 2.0*Math.sin(input) + 3.0*Math.exp(input);
+
+    public static Function<Double, Double> SinAddCos = x -> Math.sin(x) + Math.cos(x);
+
 }
