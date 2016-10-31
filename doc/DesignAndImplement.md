@@ -164,5 +164,7 @@ public static Function<Double,Double> sigmoidLambda = input -> sigmoid(input);
 
 可以看出只显示中间的 80% 均方差的曲线会比较平滑，比如 `200-400` 内`全部输出的均方差`明显变化较大，这与我们的解释是可以吻合的。
 
+## 
+
 
 
