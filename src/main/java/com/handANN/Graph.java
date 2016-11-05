@@ -12,7 +12,7 @@ import java.util.Map;
 /**
  * Created by miao on 2016/10/4.
  */
-public class Graph {
+public class Graph implements IGraph {
 
 
     private Table<Point, Point, Double> weightedGraph = HashBasedTable.create();

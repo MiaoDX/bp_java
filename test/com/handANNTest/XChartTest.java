@@ -54,8 +54,8 @@ public class XChartTest {
     public void sinAndSinAddCos() throws IOException, InterruptedException {
         IRanGen ranGen = new RanGen(0);
         int num = 100;
-        double domainStart = -Math.PI*2;
-        double domainEnd = Math.PI*2;
+        double domainStart = -Math.PI * 2;
+        double domainEnd = Math.PI * 2;
 
         Function<Double, Double> sinF = MatchingFunctions.sinF;
         FunctionFaux functionFaux = new FunctionFaux(ranGen, sinF, domainStart, domainEnd, num);
@@ -66,7 +66,7 @@ public class XChartTest {
         Function<Double, Double> SinAddCos = MatchingFunctions.SinAddCos;
         Function<Double, Double> FiveSinADDFourCosX = MatchingFunctions.FiveSinADDFourCosX;
 
-        Function<Double, Double> sinHalfAddcosOneThird = x -> 0.5*Math.sin(x/2);
+        Function<Double, Double> sinHalfAddcosOneThird = x -> 0.5 * Math.sin(x / 2);
 
         FunctionFaux functionFaux2 = new FunctionFaux(ranGen, sinHalfAddcosOneThird, domainStart, domainEnd, num);
 
@@ -79,7 +79,7 @@ public class XChartTest {
             assertThat(sinHalfAddcosOneThird.apply(domainValues.get(i))).isEqualTo(sinAddCosYs.get(i));
         }
 
-        AreaLineChartWithXChart.show(domainValues, siFYs, sinAddCosYs, "function_complex" ,"sin(x)", "0.5*sin(x/2)");
+        AreaLineChartWithXChart.show(domainValues, siFYs, sinAddCosYs, "function_complex", "sin(x)", "0.5*sin(x/2)");
 
     }
 }

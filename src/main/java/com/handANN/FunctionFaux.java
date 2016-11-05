@@ -49,12 +49,12 @@ public class FunctionFaux {
         this.num = num;
     }
 
-    public void widenDomainAndRemoveSampleSet(int widenSize){ //wide the domain and function value for better plot performance
+    public void widenDomainAndRemoveSampleSet(int widenSize) { //wide the domain and function value for better plot performance
         double oldGap = domainEnd - domainStart;
-        double widenDomainStart = domainStart - oldGap*widenSize/2;
-        double widenDomainEnd = domainEnd + oldGap*widenSize/2;
+        double widenDomainStart = domainStart - oldGap * widenSize / 2;
+        double widenDomainEnd = domainEnd + oldGap * widenSize / 2;
 
-        int newNum = widenSize*num*2;   // multiply 2 is to generate more dense points
+        int newNum = widenSize * num * 2;   // multiply 2 is to generate more dense points
 
         double newStep = (widenDomainEnd - widenDomainStart) / (newNum - 1);
 
@@ -70,10 +70,10 @@ public class FunctionFaux {
         widenFunctionValues = widenDomainValues.stream().map(v -> matchingF.apply(v)).collect(Collectors.toList());
     }
 
-    public void denseDomainAndRemoveSampleSet(int denseSize){ //wide the domain and function value for better plot performance
+    public void denseDomainAndRemoveSampleSet(int denseSize) { //wide the domain and function value for better plot performance
 
 
-        int newNum = denseSize*num;   // multiply 2 is to generate more dense points
+        int newNum = denseSize * num;   // multiply 2 is to generate more dense points
 
         double newStep = (domainEnd - domainStart) / (newNum - 1);
 
@@ -88,9 +88,6 @@ public class FunctionFaux {
 
         denseFunctionValues = denseDomainValues.stream().map(v -> matchingF.apply(v)).collect(Collectors.toList());
     }
-
-
-
 
 
     public List<Double> getRandomNextInputAndTarget() {
@@ -117,6 +114,7 @@ public class FunctionFaux {
     public List<Double> getWidenFunctionValues() {
         return widenFunctionValues;
     }
+
     public List<Double> getDenseDomainValues() {
         return denseDomainValues;
     }

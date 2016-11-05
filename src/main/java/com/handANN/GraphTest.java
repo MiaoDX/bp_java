@@ -1,12 +1,13 @@
 package com.handANN;//import org.testng.annotations.Test;
 
 import com.google.common.collect.LinkedHashMultimap;
-import com.google.common.collect.ListMultimap;
-import org.assertj.core.data.Offset;
 import org.testng.annotations.Test;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -60,9 +61,8 @@ public class GraphTest {
         List<Double> moreY = functionFaux.getWidenFunctionValues();
 
 
-
         List<Double> weGotMoreY = new ArrayList<>();
-        for(Double i : moreX){
+        for (Double i : moreX) {
             graph.updateGraph(i, 0.0);
             graph.forward();
             weGotMoreY.add(graph.getOutput());
@@ -75,14 +75,14 @@ public class GraphTest {
         List<Double> denseY = functionFaux.getDenseFunctionValues();
         List<Double> weGotDenseY = new ArrayList<>();
         List<Double> mseList = new ArrayList<>();
-        for(Double i : denseX){
+        for (Double i : denseX) {
             graph.updateGraph(i, 0.0);
             graph.forward();
             weGotDenseY.add(graph.getOutput());
-            mseList.add(graph.getError()*graph.getError());
+            mseList.add(graph.getError() * graph.getError());
         }
 
-        double mse = mseList.stream().mapToDouble(input -> input).sum()/mseList.size();
+        double mse = mseList.stream().mapToDouble(input -> input).sum() / mseList.size();
 
 
         System.out.println(mse);
@@ -219,7 +219,7 @@ public class GraphTest {
 
 //                sumMSE += error*error;
 
-                mseList.add(error*error);
+                mseList.add(error * error);
             }
 
 //            sumMSE = Math.sqrt(sumMSE)/num;
@@ -228,20 +228,18 @@ public class GraphTest {
 //            assertThat(mseList.size()).isEqualTo(num);
 
 
-
 //            sumMSE = Math.sqrt(mseList.stream().mapToDouble(input -> input).sum())/mseList.size();
 
 
             mseList.sort(Comparator.naturalOrder());
-            List<Double> tenth2nineoutoften  =  mseList.subList(num/10, num*9/10);
-            sumMSE = Math.sqrt(tenth2nineoutoften.stream().mapToDouble(input -> input).sum())/tenth2nineoutoften.size();
+            List<Double> tenth2nineoutoften = mseList.subList(num / 10, num * 9 / 10);
+            sumMSE = Math.sqrt(tenth2nineoutoften.stream().mapToDouble(input -> input).sum()) / tenth2nineoutoften.size();
 
 
-
-            List<Double> lastTenth = mseList.subList(num*9/10, num);
-            List<Double> outsideTenth  =  mseList.subList(0, num/10);
+            List<Double> lastTenth = mseList.subList(num * 9 / 10, num);
+            List<Double> outsideTenth = mseList.subList(0, num / 10);
             outsideTenth.addAll(lastTenth);
-            sumMSE = Math.sqrt(outsideTenth.stream().mapToDouble(input -> input).sum())/outsideTenth.size();
+            sumMSE = Math.sqrt(outsideTenth.stream().mapToDouble(input -> input).sum()) / outsideTenth.size();
 
 //            assertThat(sumMSE).isCloseTo(tmpSumMSE, Offset.offset(0.001));
 
@@ -251,7 +249,7 @@ public class GraphTest {
                 System.out.println(time + " MSE: " + sumMSE + ":" + graph.getOutput() + ";" + graph.getError());
             }
 
-            if(time%1 == 0){
+            if (time % 1 == 0) {
                 sumMSEListsX.add(0.0 + time);
                 sumMSEListsY.add(sumMSE);
             }
@@ -284,36 +282,18 @@ public class GraphTest {
 
         Function<String, List<Double>> str2List = str -> Arrays.asList(str.split(" ")).stream().map(s -> Double.valueOf(s)).collect(Collectors.toList());
 
-        List<Double> x =  str2List.apply(xs);
+        List<Double> x = str2List.apply(xs);
         List<Double> ninthY = str2List.apply(ninthYstr);
         List<Double> allY = str2List.apply(allYstr);
         List<Double> outsideNinth = str2List.apply(outsideNinthstr);
 
-        Arrays.asList(1,23,4);
+        Arrays.asList(1, 23, 4);
 
-        AreaLineChartWithXChart.show(Arrays.asList(x, allY,ninthY,outsideNinth),"mse_shock" , Arrays.asList("all", "middlEightOutOfTen","twoOutsideTenth"));
+        AreaLineChartWithXChart.show(Arrays.asList(x, allY, ninthY, outsideNinth), "mse_shock", Arrays.asList("all", "middlEightOutOfTen", "twoOutsideTenth"));
 
 //        AreaLineChartWithXChart.show(Arrays.asList(x, allY,ninthY),"mse_shock" , Arrays.asList("all", "middlEightOutOfTen"));
 
 
-
-    }
-
-    @Test
-    public void testAddAll(){
-        List<String> list=new ArrayList<String>();
-        list.add("保护环境");     //向列表中添加数据
-        list.add("爱护地球");     //向列表中添加数据
-        list.add("从我做起");        //向列表中添加数据
-        list.add(1,"从我做起");     //在第1+1个元素的位置添加数据
-        List<String> list_ad=new ArrayList<String>();
-        list_ad.add("公益广告");
-        //将list中的全部元素添加到list_ad中
-        System.out.println("添加是否成功："+list_ad.addAll(list));
-        //通过循环输出列表中的内容
-        for(int i=0;i<list_ad.size();i++){
-            System.out.println(i+":"+list_ad.get(i));
-        }
     }
 
 

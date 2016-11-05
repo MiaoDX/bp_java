@@ -36,8 +36,6 @@ public class FunctionFauxTest {
         List<Double> functionValues = functionFaux.getFunctionValues();
 
 
-
-
         for (int i = 0; i < num; i++) {
             System.out.println(domainValues.get(i) + ":" + functionValues.get(i));
             assertThat(f.apply(domainValues.get(i))).isEqualTo(functionValues.get(i));

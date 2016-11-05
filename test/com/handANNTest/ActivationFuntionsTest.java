@@ -48,6 +48,14 @@ public class ActivationFuntionsTest {
         assertThat(functionAsPara.f()).isEqualTo(200);
     }
 
+    @Test
+    public void testHalf() {
+        Function<Double, Double> f = ActivationFuntions.halfLambda;
+        System.out.println(f.apply(0.8));
+        System.out.println((0.1 + 0.7) / 2);
+        System.out.println((0.1 + 0.7) * 0.5);
+    }
+
 
     //API which accepts an implementation of
 

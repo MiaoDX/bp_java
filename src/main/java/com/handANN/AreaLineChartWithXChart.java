@@ -4,12 +4,11 @@ import org.knowm.xchart.*;
 import org.knowm.xchart.style.markers.SeriesMarkers;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Exchanger;
-import java.util.function.DoubleBinaryOperator;
 import java.util.function.Function;
+
 import static org.assertj.core.api.Assertions.assertThat;
+
 /**
  * Created by miao on 2016/10/26.
  */
@@ -38,20 +37,18 @@ public class AreaLineChartWithXChart {
     public static void show(List<List<Double>> xAndYs, String picName, List<String> lineNames) throws InterruptedException, IOException {
 
 
-        assertThat(xAndYs.size()).isEqualTo(lineNames.size()+1);
+        assertThat(xAndYs.size()).isEqualTo(lineNames.size() + 1);
 
 // Create Chart
         XYChart chart = new XYChartBuilder().width(800).height(600).title(picName).xAxisTitle("x").yAxisTitle("f").build();
 
 
-
-        for(int i = 0;i < lineNames.size(); i ++){
-            chart.addSeries(lineNames.get(i), xAndYs.get(0), xAndYs.get(i+1)).setMarker(SeriesMarkers.NONE);;
+        for (int i = 0; i < lineNames.size(); i++) {
+            chart.addSeries(lineNames.get(i), xAndYs.get(0), xAndYs.get(i + 1)).setMarker(SeriesMarkers.NONE);
+            ;
         }
 
         new SwingWrapper<XYChart>(chart).displayChart();
-
-
 
 
         BitmapEncoder.saveBitmap(chart, "./" + picName, BitmapEncoder.BitmapFormat.PNG);
