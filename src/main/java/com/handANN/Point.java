@@ -30,6 +30,21 @@ public class Point {
 
     }
 
+    public double derivativeAndReturnDifferentiation() {
+        return differentiationF.apply(input);
+    }
+
+
+    public void activateAndSetOutput() {
+        // layer specific
+        if (layer == 0) {
+            output = activationF.apply(input);
+        } else {
+            output = activationF.apply(input + bias);
+        }
+    }
+
+
     @Override
     public String toString() {
         return JSON.toJSONString(this);
