@@ -20,21 +20,31 @@
     </properties>
 
     <repositories>
-        <repository>
-            <id>thirdparty-releases</id>
-            <name>JBoss Thirdparty Releases</name>
-            <url>https://repository.jboss.org/nexus/content/repositories/thirdparty-releases/</url>
-        </repository>
+        <!--<repository>-->
+            <!--<id>thirdparty-releases</id>-->
+            <!--<name>JBoss Thirdparty Releases</name>-->
+            <!--<url>https://repository.jboss.org/nexus/content/repositories/thirdparty-releases/</url>-->
+        <!--</repository>-->
     </repositories>
 
 
     <dependencies>
+        <!--&lt;!&ndash; https://mvnrepository.com/artifact/com.google.guava/guava &ndash;&gt;-->
+        <!--<dependency>-->
+            <!--<groupId>com.google.guava</groupId>-->
+            <!--<artifactId>guava</artifactId>-->
+            <!--<version>20.0-hal</version>-->
+        <!--</dependency>-->
+
+
         <!-- https://mvnrepository.com/artifact/com.google.guava/guava -->
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-            <version>20.0-hal</version>
+            <version>20.0</version>
         </dependency>
+
+
 
         <!-- https://mvnrepository.com/artifact/org.testng/testng -->
         <dependency>
