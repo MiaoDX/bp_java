@@ -4,8 +4,11 @@ import java.util.function.Function;
 
 /**
  * Created by miao on 2016/10/4.
+ * <p>
+ * Hahaha,this is amazing that: (0.1+0.7)/2 != 0.8/4
  */
 public class ActivationFuntions {
+
 
     public static Function<Double, Double> sigmoidLambda = input -> sigmoid(input);
     public static Function<Double, Double> sigmoidDifferentiationLambda = input -> sigmoid(input) * (1 - sigmoid(input));
