@@ -124,8 +124,7 @@ public class Graph implements IGraph {
                 nowPointInput += previousPoint.getOutput() * weight;
             }
 
-            nowPointInput += nowPoint.getBias();
-//            double nowPointOutput = activationF(nowPointInput);
+            nowPointInput += nowPoint.getBias();    // the input here have both bias and sum of former output
             double nowPointOutput = nowPoint.getActivationF().apply(nowPointInput);
             nowPoint.setInput(nowPointInput);
             nowPoint.setOutput(nowPointOutput);
@@ -195,18 +194,6 @@ public class Graph implements IGraph {
             p.setBias(newBias);
         }
     }
-
-
-    public double differentiationF(double input) {
-        double sig = ActivationFuntions.sigmoid(input);
-        return sig * (1 - sig);
-    }
-
-
-    public double activationF(double input) {
-        return ActivationFuntions.sigmoid(input);
-    }
-
 
     public Table<Point, Point, Double> getWeightedGraph() {
         return weightedGraph;

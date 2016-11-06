@@ -58,7 +58,7 @@ public class GraphGuavaTest {
             mseList.add(graph.getLastLayerNodesErrors().get(0) * graph.getLastLayerNodesErrors().get(0));
         }
 
-        double mse = mseList.stream().mapToDouble(input -> input).sum() / mseList.size();
+        double mse = Math.sqrt(mseList.stream().mapToDouble(input -> input).sum()) / mseList.size();
 
 
         System.out.println(mse);
@@ -67,14 +67,39 @@ public class GraphGuavaTest {
 
         assertThat(moreX.size()).isEqualTo(moreY.size()).isEqualTo(weGotMoreY.size()).isGreaterThan(0);
 
-//        AreaLineChartWithXChart.show(moreX, moreY, weGotMoreY, "Just_more_Answer", "larger domain truth", "we got at larger domain");
+        AreaLineChartWithXChart.show(moreX, moreY, weGotMoreY, "Just_more_Answer", "larger domain truth", "we got at larger domain");
 
         System.out.println(denseX.size() + ";" + denseY.size() + ";" + weGotDenseY.size());
 
         assertThat(denseX.size()).isEqualTo(denseY.size()).isEqualTo(weGotDenseY.size()).isGreaterThan(0);
 
-//        AreaLineChartWithXChart.show(denseX, denseY, weGotDenseY, "Dense_test_set", "test set truth", "we got at test set, mse error:" + mse);
+        AreaLineChartWithXChart.show(denseX, denseY, weGotDenseY, "Dense_test_set", "test set truth", "we got at test set, mse error:" + mse);
 
+
+    }
+
+    public static void gettingBetter(GraphGuava graph) {
+        int time = 1;
+        double oldError = 100;
+        double nowError = 0.0;
+
+        do {
+            time++;
+            graph.train();
+
+            if (time % 1000 == 0) {
+                System.out.println(time + ":" + graph.getLastLayerNodesOutput() + "," + graph.getLastLayerNodesErrors());
+            }
+
+
+            nowError = Math.abs(graph.getLastLayerNodesErrors().get(0));
+            assertThat(nowError).isLessThan(oldError);
+            oldError = nowError;
+
+        } while (nowError > 0.001);
+
+
+        System.out.println("\n" + time + ":" + graph.getLastLayerNodesErrors());
 
     }
 
@@ -174,7 +199,7 @@ public class GraphGuavaTest {
     }
 
     @Test
-    public void layer_1_2_1_WithHalfsAndSameActivationFunction() {
+    public void layer_1half_2_half_sigmoid_1SameActivationFunction() {
 
         List<Integer> layerNum = Arrays.asList(1, 2, 1);
         IRanGen ranGen = new RanGenProvided(0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8);
@@ -192,8 +217,8 @@ public class GraphGuavaTest {
 
         p00.setActivationF(ActivationFuntions.halfLambda);
         p00.setDifferentiationF(ActivationFuntions.halfDifferentiationLambda);
-        p10.setActivationF(ActivationFuntions.halfLambda);
-        p10.setDifferentiationF(ActivationFuntions.halfDifferentiationLambda);
+//        p10.setActivationF(ActivationFuntions.halfLambda);
+//        p10.setDifferentiationF(ActivationFuntions.halfDifferentiationLambda);
         p11.setActivationF(ActivationFuntions.halfLambda);
         p11.setDifferentiationF(ActivationFuntions.halfDifferentiationLambda);
 
@@ -230,45 +255,49 @@ public class GraphGuavaTest {
         assertThat(p00.getOutput()).isEqualTo(0.5);
 
         assertThat(p10.getInput()).isEqualTo(0.05);
-        assertThat(p10.getOutput()).isEqualTo(13.0 / 40);
+        assertThat(p10.getOutput()).isEqualTo(0.6570104626734988);
 
         assertThat(p11.getInput()).isEqualTo(0.1);
         assertThat(p11.getOutput()).isCloseTo(0.4, Offset.offset(1e-5));
 
-        assertThat(p20.getInput()).isEqualTo(103.0 / 400);
-        assertThat(p20.getOutput()).isEqualTo(423.0 / 400);
+        assertThat(p20.getInput()).isCloseTo(0.3571, Offset.offset(1e-4));
+        assertThat(p20.getOutput()).isCloseTo(1.1571, Offset.offset(1e-4));
 
-        assertThat(graph.getLastLayerNodesErrors()).isEqualTo(Arrays.asList(1.0 - 423.0 / 400));
+        assertThat(graph.getLastLayerNodesErrors().get(0)).isCloseTo(-0.1571, Offset.offset(1e-4));
 
 
-        double error = 1.0 - 423.0 / 400;
+        double error = -0.1571;
 //        graph.backwardTheta();
         graph.backwardThetaWithStream();
 
 
-        assertThat(p20.getTheta()).isEqualTo(error);  //sameDifferentiation is 1
+        assertThat(p20.getTheta()).isCloseTo(error, Offset.offset(1e-4));  //sameDifferentiation is 1
 
-        assertThat(p10.getTheta()).isEqualTo(0.3 * error * 0.5); // halfDifferentiationLambda is 0.5
-        assertThat(p11.getTheta()).isEqualTo(0.4 * error * 0.5);
+        assertThat(p10.getTheta()).isCloseTo(-0.01062, Offset.offset(1e-4)); // halfDifferentiationLambda is 0.5
+        assertThat(p11.getTheta()).isCloseTo(-0.03142, Offset.offset(1e-4));
 
 
-        assertThat(p00.getTheta()).isCloseTo(11.0 / 400 * error, Offset.offset(1e-5));
+        assertThat(p00.getTheta()).isCloseTo(-0.003673, Offset.offset(1e-4));
 
 
 //       graph.backwardWeight();
         graph.backwardWeightWithStream();
 
-        assertThat(weightedGraphGuava.edgeValue(p00, p10)).isEqualTo(0.1 + learnRatio * p00.getOutput() * p10.getTheta());
-        assertThat(p10.getBias()).isEqualTo(0.6 + learnRatio * p10.getTheta());
+        assertThat(weightedGraphGuava.edgeValue(p00, p10)).isCloseTo(0.0997345, Offset.offset(1e-4));
+        assertThat(weightedGraphGuava.edgeValue(p00, p11)).isCloseTo(0.1992145, Offset.offset(1e-4));
+        assertThat(weightedGraphGuava.edgeValue(p10, p20)).isCloseTo(0.29483918645, Offset.offset(1e-4));
+        assertThat(weightedGraphGuava.edgeValue(p11, p20)).isCloseTo(0.396858, Offset.offset(1e-4));
+
+        assertThat(p00.getBias()).isCloseTo(0.49981635, Offset.offset(1e-4));
+        assertThat(p10.getBias()).isCloseTo(0.599469, Offset.offset(1e-4));
+        assertThat(p11.getBias()).isCloseTo(0.698429, Offset.offset(1e-4));
+        assertThat(p20.getBias()).isCloseTo(0.792145, Offset.offset(1e-4));
 
 
-
-
- /*
         //assert getting better
-        //GraphTest.gettingBetter(graph);
+        gettingBetter(graph);
 
-*/
+
     }
 
     /**
@@ -278,7 +307,7 @@ public class GraphGuavaTest {
     public void predefinedGraph() throws InterruptedException, IOException {
 
 
-        List<Integer> layerNum = Arrays.asList(1, 10, 1);
+        List<Integer> layerNum = Arrays.asList(1, 3, 3, 4, 1);
         IRanGen ranGen = new RanGen(0);
 
         double learnRatio = 1.0 / 20;
@@ -287,10 +316,12 @@ public class GraphGuavaTest {
         List<List<Point>> allLayersNodes = graph.getAllLayersNodes();
         MutableValueGraph<Point, Double> weightedGraphGuava = graph.getWeightedGraphGuava();
 
-        Point p20 = allLayersNodes.get(2).get(0);
+        //Point p20 = allLayersNodes.get(2).get(0);
 
-        p20.setActivationF(ActivationFuntions.sameLambda);
-        p20.setDifferentiationF(ActivationFuntions.sameDifferentiationLambda);
+        Point plast = graph.getLastLayerNodes().get(0);
+
+        plast.setActivationF(ActivationFuntions.sameLambda);
+        plast.setDifferentiationF(ActivationFuntions.sameDifferentiationLambda);
 
 
         int num = 100;
@@ -304,14 +335,14 @@ public class GraphGuavaTest {
 
         Function OnePlusTwoSinPlusThreeExp = MatchingFunctions.OnePlusTwoSinPlusThreeExp;
 
-        FunctionFaux functionFaux = new FunctionFaux(ranGen, sinf, -Math.PI, Math.PI, num);
+        FunctionFaux functionFaux = new FunctionFaux(ranGen, OnePlusTwoSinPlusThreeExp, -Math.PI, Math.PI, num);
 
         int time = 0;
         double allowedError = 1e-4;
         double sumMSE = 0.0;
         double oldMSE = 1000;
 
-        int maxEpoch = 200000;
+        int maxEpoch = 100000;
 
         List<Double> domainValues = functionFaux.getDomainValues();
         List<Double> functionValues = functionFaux.getFunctionValues();
@@ -356,7 +387,9 @@ public class GraphGuavaTest {
 
 
             List<Double> lastTenth = mseList.subList(num * 9 / 10, num);
-            List<Double> outsideTenth = mseList.subList(0, num / 10);
+            List<Double> firstTenth = mseList.subList(0, num / 10);
+            List<Double> outsideTenth = new ArrayList<>();
+            outsideTenth.addAll(firstTenth);
             outsideTenth.addAll(lastTenth);
             sumMSE = Math.sqrt(outsideTenth.stream().mapToDouble(input -> input).sum()) / outsideTenth.size();
 
@@ -368,7 +401,7 @@ public class GraphGuavaTest {
                 System.out.println(time + " MSE: " + sumMSE + ":" + graph.getLastLayerNodesErrors());
             }
 
-            if (time % 1 == 0) {
+            if (time % 100 == 0) {
                 sumMSEListsX.add(0.0 + time);
                 sumMSEListsY.add(sumMSE);
             }

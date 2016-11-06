@@ -50,10 +50,10 @@ public class ActivationFuntionsTest {
 
     @Test
     public void testHalf() {
-        Function<Double, Double> f = ActivationFuntions.halfLambda;
-        System.out.println(f.apply(0.8));
-        System.out.println((0.1 + 0.7) / 2);
-        System.out.println((0.1 + 0.7) * 0.5);
+        Function<Double, Double> f = ActivationFuntions.sigmoidLambda;
+        System.out.println(f.apply(0.65));
+        Function<Double, Double> f1 = ActivationFuntions.sigmoidDifferentiationLambda;
+        System.out.println(-0.1571 * 0.3 * f1.apply(0.65));
     }
 
 

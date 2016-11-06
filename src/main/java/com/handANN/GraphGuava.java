@@ -65,6 +65,7 @@ public class GraphGuava implements IGraph {
         //set first and last layer nodes
         firstLayerNodes = allLayersNodes.get(0);
         lastLayerNodes = allLayersNodes.get(layerNum.size() - 1);
+
         learnRatio = _learnRatio;
     }
 
@@ -89,12 +90,6 @@ public class GraphGuava implements IGraph {
         this.backwardWeight();
     }
 
-    public void trainWithStream() {
-        this.forwardWithStream();
-        this.backwardThetaWithStream();
-        this.backwardWeightWithStream();
-    }
-
 
     public double weightGetter(Point a, Point b) {
         return weightedGraphGuava.edgeValue(a, b);
@@ -106,9 +101,9 @@ public class GraphGuava implements IGraph {
 
         double nowNodeInput = 0.0;
         for (Point preNode : preNodes) {
-            preNode.activateAndSetOutput();
             nowNodeInput += preNode.getOutput() * weightGetter(preNode, nowNode);
         }
+
         nowNode.setInput(nowNodeInput);
     }
 
@@ -123,33 +118,11 @@ public class GraphGuava implements IGraph {
         }
     }
 
-    public void forwardCalcInputWithStream(Point nowNode) {
-        weightedGraphGuava.predecessors(nowNode).parallelStream().forEach(preNode -> preNode.activateAndSetOutput());
-        double nowNodeInput = weightedGraphGuava.predecessors(nowNode).parallelStream().map(preNode -> preNode.getOutput() * weightGetter(preNode, nowNode)).mapToDouble(v -> v).sum();
-        nowNode.setInput(nowNodeInput);
-    }
-
-    public void forwardCalcLayerInputWithStream(int layerNum) {
-        if (layerNum == 0) { // since we have dealt with first layer,just return
-            return;
-        }
-
-        List<Point> layerNodes = allLayersNodes.get(layerNum);
-
-        layerNodes.parallelStream().forEach(node -> forwardCalcInputWithStream(node));
-    }
-
-
     public void forwardCalcLayerOutput(int layerNum) {
         List<Point> layerNodes = allLayersNodes.get(layerNum);
         for (Point node : layerNodes) {
             node.activateAndSetOutput();
         }
-    }
-
-    public void forwardCalcLayerOutputWithStream(int layerNum) {
-        List<Point> layerNodes = allLayersNodes.get(layerNum);
-        layerNodes.parallelStream().forEach(node -> node.activateAndSetOutput());
     }
 
 
@@ -171,45 +144,18 @@ public class GraphGuava implements IGraph {
         calcError();
     }
 
-    public void forwardWithStream() {
-
-        for (int nowLayerNum = 0; nowLayerNum < allLayersNodes.size(); nowLayerNum++) {
-            forwardCalcLayerInputWithStream(nowLayerNum);
-            forwardCalcLayerOutputWithStream(nowLayerNum);
-        }
-
-        calcError();
-    }
-
-
-    public void backwardCalcLayerThetaWithStream(int layerNum) {
-
-        if (layerNum == allLayersNodes.size() - 1) { // last layer must take care,since this don't have after nodes
-            calcLastLayerTheta();
-            return;
-        }
-
-        List<Point> layerNodes = allLayersNodes.get(layerNum);
-        layerNodes.parallelStream().forEach(nowNode -> backwardCalcThetaWithStream(nowNode));
-    }
-
-    public void backwardCalcThetaWithStream(Point nowNode) {
-        Set<Point> afterNodes = weightedGraphGuava.successors(nowNode);
-        double nowNodeTheta = afterNodes.parallelStream().map(afterNode -> afterNode.getTheta() * weightGetter(nowNode, afterNode)).mapToDouble(v -> v).sum();
-        nowNode.setTheta(nowNode.derivativeAndReturnDifferentiation() * nowNodeTheta);
-    }
 
     public void backwardCalcTheta(Point nowNode) {
 
         Set<Point> afterNodes = weightedGraphGuava.successors(nowNode);
 
-        double nowNodeTheta = 0.0;
+        double afterNodesThetaSum = 0.0;
 
         for (Point afterNode : afterNodes) {
-            nowNodeTheta += afterNode.getTheta() * weightGetter(nowNode, afterNode);
+            afterNodesThetaSum += afterNode.getTheta() * weightGetter(nowNode, afterNode);
         }
 
-        nowNode.setTheta(nowNode.derivativeAndReturnDifferentiation() * nowNodeTheta);
+        nowNode.setTheta(nowNode.derivativeAndReturnDifferentiation() * afterNodesThetaSum);
     }
 
 
@@ -243,12 +189,6 @@ public class GraphGuava implements IGraph {
         }
     }
 
-    public void backwardThetaWithStream() {
-        for (int nowLayerNum = allLayersNodes.size() - 1; nowLayerNum >= 0; nowLayerNum--) {
-            backwardCalcLayerThetaWithStream(nowLayerNum);
-        }
-    }
-
 
     /**
      * As the http://galaxy.agh.edu.pl/%7Evlsi/AI/backp_t_en/backprop.html ,back or forward is the same
@@ -262,11 +202,6 @@ public class GraphGuava implements IGraph {
         }
 
         updateBias();
-    }
-
-    public void backwardWeightWithStream() {
-        weightedGraphGuava.edges().parallelStream().forEach(edge -> updateWeight((Point) edge.source(), (Point) edge.target()));
-        updateBiasWithStream();
     }
 
 
@@ -286,10 +221,6 @@ public class GraphGuava implements IGraph {
         }
     }
 
-    public void updateBiasWithStream() {
-        weightedGraphGuava.nodes().parallelStream().forEach(p -> p.setBias(p.getBias() + learnRatio * p.getTheta()));
-    }
-
 
     public List<List<Point>> getAllLayersNodes() {
         return allLayersNodes;
@@ -303,10 +234,86 @@ public class GraphGuava implements IGraph {
         return lastLayerNodesErrors;
     }
 
+    public List<Point> getLastLayerNodes() {
+        return lastLayerNodes;
+    }
+
 
     // hand written helper function
     public List<Double> getLastLayerNodesOutput() {
         return lastLayerNodes.stream().map(node -> node.getOutput()).collect(Collectors.toList());
     }
 
+
+    public void trainWithStream() {
+        this.forwardWithStream();
+        this.backwardThetaWithStream();
+        this.backwardWeightWithStream();
+    }
+
+
+    public void forwardCalcInputWithStream(Point nowNode) {
+        weightedGraphGuava.predecessors(nowNode).parallelStream().forEach(preNode -> preNode.activateAndSetOutput());
+        double nowNodeInput = weightedGraphGuava.predecessors(nowNode).parallelStream().map(preNode -> preNode.getOutput() * weightGetter(preNode, nowNode)).mapToDouble(v -> v).sum();
+        nowNode.setInput(nowNodeInput);
+    }
+
+    public void forwardCalcLayerInputWithStream(int layerNum) {
+        if (layerNum == 0) { // since we have dealt with first layer,just return
+            return;
+        }
+
+        List<Point> layerNodes = allLayersNodes.get(layerNum);
+
+        layerNodes.parallelStream().forEach(node -> forwardCalcInputWithStream(node));
+    }
+
+    public void forwardCalcLayerOutputWithStream(int layerNum) {
+        List<Point> layerNodes = allLayersNodes.get(layerNum);
+        layerNodes.parallelStream().forEach(node -> node.activateAndSetOutput());
+    }
+
+
+    public void forwardWithStream() {
+
+        for (int nowLayerNum = 0; nowLayerNum < allLayersNodes.size(); nowLayerNum++) {
+            forwardCalcLayerInputWithStream(nowLayerNum);
+            forwardCalcLayerOutputWithStream(nowLayerNum);
+        }
+
+        calcError();
+    }
+
+
+    public void backwardCalcLayerThetaWithStream(int layerNum) {
+
+        if (layerNum == allLayersNodes.size() - 1) { // last layer must take care,since this don't have after nodes
+            calcLastLayerTheta();
+            return;
+        }
+
+        List<Point> layerNodes = allLayersNodes.get(layerNum);
+        layerNodes.parallelStream().forEach(nowNode -> backwardCalcThetaWithStream(nowNode));
+    }
+
+    public void backwardCalcThetaWithStream(Point nowNode) {
+        Set<Point> afterNodes = weightedGraphGuava.successors(nowNode);
+        double nowNodeTheta = afterNodes.parallelStream().map(afterNode -> afterNode.getTheta() * weightGetter(nowNode, afterNode)).mapToDouble(v -> v).sum();
+        nowNode.setTheta(nowNode.derivativeAndReturnDifferentiation() * nowNodeTheta);
+    }
+
+    public void backwardThetaWithStream() {
+        for (int nowLayerNum = allLayersNodes.size() - 1; nowLayerNum >= 0; nowLayerNum--) {
+            backwardCalcLayerThetaWithStream(nowLayerNum);
+        }
+    }
+
+    public void backwardWeightWithStream() {
+        weightedGraphGuava.edges().parallelStream().forEach(edge -> updateWeight((Point) edge.source(), (Point) edge.target()));
+        updateBiasWithStream();
+    }
+
+    public void updateBiasWithStream() {
+        weightedGraphGuava.nodes().parallelStream().forEach(p -> p.setBias(p.getBias() + learnRatio * p.getTheta()));
+    }
 }

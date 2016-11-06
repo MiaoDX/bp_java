@@ -31,7 +31,12 @@ public class Point {
     }
 
     public double derivativeAndReturnDifferentiation() {
-        return differentiationF.apply(input);
+        // layer specific
+        if (layer == 0) {
+            return differentiationF.apply(input);
+        } else {
+            return differentiationF.apply(input + bias);
+        }
     }
 
 
