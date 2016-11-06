@@ -82,7 +82,7 @@ public class GraphTest {
             mseList.add(graph.getError() * graph.getError());
         }
 
-        double mse = mseList.stream().mapToDouble(input -> input).sum() / mseList.size();
+        double mse = Math.sqrt(mseList.stream().mapToDouble(input -> input).sum()) / mseList.size();
 
 
         System.out.println(mse);
@@ -237,7 +237,9 @@ public class GraphTest {
 
 
             List<Double> lastTenth = mseList.subList(num * 9 / 10, num);
-            List<Double> outsideTenth = mseList.subList(0, num / 10);
+            List<Double> firstTenth = mseList.subList(0, num / 10);
+            List<Double> outsideTenth = new ArrayList<>();
+            outsideTenth.addAll(firstTenth);
             outsideTenth.addAll(lastTenth);
             sumMSE = Math.sqrt(outsideTenth.stream().mapToDouble(input -> input).sum()) / outsideTenth.size();
 
