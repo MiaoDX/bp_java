@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="14.2">
+  <zoom_level>8</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>568</x>
+      <y>232</y>
+      <w>272</w>
+      <h>96</h>
+    </coordinates>
+    <panel_attributes>Graph
+--
++ Graph 多个构造函数
+
++ Table&lt;Point, Point, Double&gt;  --  HashBasedTable
+--
+
+group=3</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>384</x>
+      <y>376</y>
+      <w>160</w>
+      <h>152</h>
+    </coordinates>
+    <panel_attributes>Point (也许 Node 更合适)
+--
++ Point 多个构造函数
+
+- 位置（第几层第几个节点）
+- 输入 z_{k}
+- 激励函数 g_{k}
+- 激励函数导函数 {g_{k}}'
+- 输出 a_{k}
+- 偏置 bias
+--
++ private 对应的 Get,Set 方法
+group=3</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>440</x>
+      <y>288</y>
+      <w>24</w>
+      <h>104</h>
+    </coordinates>
+    <panel_attributes>
+group=3</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;110.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLInterface</id>
+    <coordinates>
+      <x>424</x>
+      <y>16</y>
+      <w>112</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>IGraph
+--
+/forward()/
+/backwardTheta()/
+/backwardWeight()/
+
+train()
+group=3</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>328</x>
+      <y>128</y>
+      <w>144</w>
+      <h>112</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.
+group=3</panel_attributes>
+    <additional_attributes>160.0;10.0;160.0;60.0;10.0;60.0;10.0;120.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>480</x>
+      <y>128</y>
+      <w>152</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.
+group=3</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;60.0;170.0;60.0;170.0;130.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>152</x>
+      <y>224</y>
+      <w>208</w>
+      <h>96</h>
+    </coordinates>
+    <panel_attributes>GraphGuava
+--
++ GraphGuava 多个构造函数
+
++ MutableValueGraph&lt;Point, Double&gt;
+--
+group=3</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>456</x>
+      <y>272</y>
+      <w>128</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+group=3</panel_attributes>
+    <additional_attributes>140.0;10.0;10.0;10.0;10.0;130.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>352</x>
+      <y>272</y>
+      <w>112</w>
+      <h>112</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+group=3</panel_attributes>
+    <additional_attributes>10.0;10.0;120.0;10.0;120.0;120.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>384</x>
+      <y>760</y>
+      <w>184</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>RanGenProvided
+--
++ 预先提供随机数
+--
+
+group=2</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLInterface</id>
+    <coordinates>
+      <x>280</x>
+      <y>560</y>
+      <w>88</w>
+      <h>112</h>
+    </coordinates>
+    <panel_attributes>IRanGen
+随机数生成
+--
+/getMaxNum()/
+/hasNext()/
+/nextDouble()/
+group=2</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>184</x>
+      <y>656</y>
+      <w>152</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.
+group=2</panel_attributes>
+    <additional_attributes>170.0;10.0;170.0;60.0;10.0;60.0;10.0;130.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>328</x>
+      <y>656</y>
+      <w>120</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.
+group=2</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;60.0;130.0;60.0;130.0;130.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>80</x>
+      <y>760</y>
+      <w>208</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>RanGen
+--
++ Java 内置的 Random
+--
+group=2</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLPackage</id>
+    <coordinates>
+      <x>640</x>
+      <y>608</y>
+      <w>192</w>
+      <h>136</h>
+    </coordinates>
+    <panel_attributes>激活函数与拟合函数
+--
+group=1</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>672</x>
+      <y>648</y>
+      <w>136</w>
+      <h>16</h>
+    </coordinates>
+    <panel_attributes>ActivationFuntions
+group=1</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>672</x>
+      <y>696</y>
+      <w>136</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>MatchingFunctions
+group=1</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>
