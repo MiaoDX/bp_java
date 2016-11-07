@@ -12,7 +12,7 @@ import java.util.Map;
 /**
  * Created by miao on 2016/10/4.
  */
-public class Graph extends IGraph {
+public class Graph implements IGraph {
 
 
     private Table<Point, Point, Double> weightedGraph = HashBasedTable.create();
@@ -111,6 +111,7 @@ public class Graph extends IGraph {
     }
 
 
+    @Override
     public void forward() {
 
         //for(Point nowPoint : weightedGraph.columnKeySet()){
@@ -138,6 +139,7 @@ public class Graph extends IGraph {
     /**
      * back the error(theta)
      */
+    @Override
     public void backwardTheta() {
 
         double theta = error;
@@ -165,6 +167,7 @@ public class Graph extends IGraph {
     /**
      * As the http://galaxy.agh.edu.pl/%7Evlsi/AI/backp_t_en/backprop.html ,back or forward is the same
      */
+    @Override
     public void backwardWeight() {
         for (Point nowPoint : pointsInReversedOrder.subList(1, pointsInReversedOrder.size())) {
             //System.out.println(nowPoint + ":" + nowPoint.getTheta());

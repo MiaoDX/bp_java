@@ -95,4 +95,22 @@ public abstract class IGraph {
 
 这种转变乍看起来并非是必要的，毕竟在每个类中写相同 `train` 方法并没有太多的代码量，但这样在其他人看代码时会更加清晰。
 
-但还是有些问题，这便是有些个人喜好的问题了，
+但还是有些问题，这便是有些个人喜好的问题了，相较于抽象类，我更喜欢使用接口来作为公共方法的呈现形式，这便引出了抽象类与接口的区别，在 SO 上查询突然发现了接口在 Java8 中引入了 [Default Methods (Defender Methods)](https://dzone.com/articles/introduction-default-methods)，所以还是转回接口实现 `IGraph`：
+
+``` java
+public interface IGraph {
+    public void forward();
+
+    public void backwardTheta();
+
+    public void backwardWeight();
+
+    default public void train(){
+        this.forward();
+        this.backwardTheta();
+        this.backwardWeight();
+    }
+}
+```
+
+嗯，这样就舒服多了 -.-

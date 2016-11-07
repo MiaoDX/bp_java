@@ -13,7 +13,7 @@ import java.util.stream.IntStream;
 /**
  * Created by miao on 2016/10/4.
  */
-public class GraphGuava extends IGraph {
+public class GraphGuava implements IGraph {
 
 
     private double learnRatio = 0.05;
@@ -135,6 +135,7 @@ public class GraphGuava extends IGraph {
         }
     }
 
+    @Override
     public void forward() {
 
         for (int nowLayerNum = 0; nowLayerNum < allLayersNodes.size(); nowLayerNum++) {
@@ -183,6 +184,7 @@ public class GraphGuava extends IGraph {
     /**
      * back the error(theta)
      */
+    @Override
     public void backwardTheta() {
         for (int nowLayerNum = allLayersNodes.size() - 1; nowLayerNum >= 0; nowLayerNum--) {
             backwardCalcLayerTheta(nowLayerNum);
@@ -193,6 +195,7 @@ public class GraphGuava extends IGraph {
     /**
      * As the http://galaxy.agh.edu.pl/%7Evlsi/AI/backp_t_en/backprop.html ,back or forward is the same
      */
+    @Override
     public void backwardWeight() {
 
         Set<EndpointPair<Point>> endpointPairs = weightedGraphGuava.edges();
