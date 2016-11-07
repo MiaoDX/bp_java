@@ -13,7 +13,7 @@ import java.util.stream.IntStream;
 /**
  * Created by miao on 2016/10/4.
  */
-public class GraphGuava implements IGraph {
+public class GraphGuava extends IGraph {
 
 
     private double learnRatio = 0.05;
@@ -84,11 +84,11 @@ public class GraphGuava implements IGraph {
     }
 
 
-    public void train() {
-        this.forward();
-        this.backwardTheta();
-        this.backwardWeight();
-    }
+//    public void train() {
+//        this.forward();
+//        this.backwardTheta();
+//        this.backwardWeight();
+//    }
 
 
     public double weightGetter(Point a, Point b) {

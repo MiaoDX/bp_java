@@ -73,4 +73,26 @@ for(Map.Entry<Point, Double> after: weightedGraph.row(nowPoint).entrySet()){
 
 ### 神经网络的训练
 
-两种数据结构实现的图均有 `train` 的方法，且都是调用自身的三个方法，我们一开始将 `IGraph` 定义为了接口，在接口中是不能有函数实现的，一开始还没有太在意，所以在两个实现类中均包含了相同的方法定义。昨天翻书时发现这正好一种模板方法，所以，便有了下面的转变：
+两种数据结构实现的图均有 `train` 的方法，且都是调用自身的三个方法，我们一开始将 `IGraph` 定义为了接口，在接口中是不能有函数实现的，一开始还没有太在意，所以在两个实现类中均包含了相同的方法定义。昨天翻书时发现这正好一种模板方法，所以，便将 `IGraph` 定义为抽象类，并以 `final` 的方式实现 `train` 方法：
+
+``` java
+public abstract class IGraph {
+    abstract public void forward();
+
+    abstract public void backwardTheta();
+
+    abstract public void backwardWeight();
+
+    final public void train() {
+        this.forward();
+        this.backwardTheta();
+        this.backwardWeight();
+    }
+}
+```
+
+### 思考
+
+这种转变乍看起来并非是必要的，毕竟在每个类中写相同 `train` 方法并没有太多的代码量，但这样在其他人看代码时会更加清晰。
+
+但还是有些问题，这便是有些个人喜好的问题了，

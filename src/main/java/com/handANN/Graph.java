@@ -12,7 +12,7 @@ import java.util.Map;
 /**
  * Created by miao on 2016/10/4.
  */
-public class Graph implements IGraph {
+public class Graph extends IGraph {
 
 
     private Table<Point, Point, Double> weightedGraph = HashBasedTable.create();
@@ -93,11 +93,11 @@ public class Graph implements IGraph {
     }
 
 
-    public void train() {
-        this.forward();
-        this.backwardTheta();
-        this.backwardWeight();
-    }
+//    public void train() {
+//        this.forward();
+//        this.backwardTheta();
+//        this.backwardWeight();
+//    }
 
 
     public void beautifyWeightedGraphOutput() {
