@@ -12,10 +12,15 @@ public class RanGenFaux implements IRanGen {
     int nowIndex = -1;
     int maxNum = 100;
 
-    public RanGenFaux() {
+    public RanGenFaux(int _maxNum) {
+        maxNum = _maxNum;
         for (int i = 0; i < maxNum; i++) {
             list.add(((double) i) / maxNum);
         }
+    }
+
+    public RanGenFaux() {
+        this(100);
     }
 
     public int getMaxNum() {
